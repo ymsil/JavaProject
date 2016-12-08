@@ -34,7 +34,7 @@ public class List_DBManager implements DB_manager
     }
 
     @Override
-    public long AddBuisness(ContentValues values) {
+    public long AddBusiness(ContentValues values) {
         Business business = Tools.ContentValuesToBusiness(values);
         businesses.add(business);
         return business.getId();
@@ -48,7 +48,7 @@ public class List_DBManager implements DB_manager
     }
 
     @Override
-    public boolean IsNewActivityOrBuisness() {
+    public boolean IsNewActivityOrBusiness() {
         return false;
     }
 

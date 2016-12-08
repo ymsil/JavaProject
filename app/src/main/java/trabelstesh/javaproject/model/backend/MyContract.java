@@ -42,13 +42,14 @@ public class MyContract
         public static final Uri BUSINESS_URI = Uri.withAppendedPath(AUTHORITY_URI, "businesses");
     }
     public static class Activity {
+        public static final String ACTIVITY_ID = "id";
         public static final String ACTIVITY_DESCRIPTION = "description";
         public static final String ACTIVITY_COUNTRY = "country";
         public static final String ACTIVITY_START_DATE = "start_date";
         public static final String ACTIVITY_END_DATE = "end_date";
         public static final String ACTIVITY_COST = "cost";
         public static final String ACTIVITY_SHORT_DESCRIPTION = "short_description";
-        public static final String ACTIVITY_BUISNESS_ID = "b_id";
+        public static final String ACTIVITY_BUSINESS_ID = "business_id";
 
         /**
          * The content:// style URI for this table

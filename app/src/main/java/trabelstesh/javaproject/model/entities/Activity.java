@@ -1,5 +1,7 @@
 package trabelstesh.javaproject.model.entities;
 
+import android.widget.Switch;
+
 import java.util.Calendar;
 
 public class Activity
@@ -11,7 +13,7 @@ public class Activity
     private Calendar endDate;
     private int cost;
     private String shortDescription;
-    private int Bid;
+    private int BusinessId;
 
     public int getId() {
         return id;
@@ -25,8 +27,10 @@ public class Activity
         return description;
     }
 
-    public void setDescription(Description description) {
-        this.description = description;
+    public void setDescription(String description)
+    {
+        for (Description d: Description.values())
+            if (d.toString() == description) this.description = d;
     }
 
     public String getCountry() {
@@ -69,11 +73,11 @@ public class Activity
         this.shortDescription = shortDescription;
     }
 
-    public int getBid() {
-        return Bid;
+    public int getBusinessId() {
+        return BusinessId;
     }
 
-    public void setBid(int bid) {
-        Bid = bid;
+    public void setBusinessId(int businessId) {
+        BusinessId = businessId;
     }
 }

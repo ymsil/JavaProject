@@ -16,9 +16,9 @@ import trabelstesh.javaproject.model.entities.User;
 public interface DB_manager
 {
     long AddUser(ContentValues values);
-    long AddBuisness(ContentValues values);
+    long AddBusiness(ContentValues values);
     long AddActivity(ContentValues values);
-    boolean IsNewActivityOrBuisness();
+    boolean IsNewActivityOrBusiness();
     Cursor GetAllUsers();
     Cursor GetAllBusinesses();
     Cursor GetAllActivities();
