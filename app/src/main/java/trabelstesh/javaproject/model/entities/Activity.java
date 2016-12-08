@@ -1,9 +1,6 @@
-package trabelstesh.javaproject;
-
-import android.location.Address;
+package trabelstesh.javaproject.model.entities;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class Activity
 {
