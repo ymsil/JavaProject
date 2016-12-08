@@ -1,6 +1,7 @@
 package trabelstesh.javaproject.model.datasource;
 
-import android.app.Activity;
+import android.content.ContentValues;
+import android.database.Cursor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,28 +17,34 @@ import trabelstesh.javaproject.model.entities.User;
 public class List_DBManager implements DB_manager
 {
     static List<User> users;
+    static List<trabelstesh.javaproject.model.entities.Activity> activities;
     static List<Business> businesses;
-    static List<Activity> activities;
 
     static {
         users = new ArrayList<>();
-        businesses = new ArrayList<>();
         activities = new ArrayList<>();
+        businesses = new ArrayList<>();
     }
 
     @Override
-    public void AddUser() {
-
+    public long AddUser(ContentValues values) {
+        User user = Tools.ContentValuesToUser(values);
+        users.add(user);
+        return user.getId();
     }
 
     @Override
-    public void AddBuisness() {
-
+    public long AddBuisness(ContentValues values) {
+        Business business = Tools.ContentValuesToBusiness(values);
+        businesses.add(business);
+        return business.getId();
     }
 
     @Override
-    public void AddActivity() {
-
+    public long AddActivity(ContentValues values) {
+        trabelstesh.javaproject.model.entities.Activity activity = Tools.ContentValuesToActivity(values);
+        activities.add(activity);
+        return activity.getId();
     }
 
     @Override
@@ -46,18 +53,18 @@ public class List_DBManager implements DB_manager
     }
 
     @Override
-    public ArrayList<User> GetAllUsers() {
-        return null;
+    public Cursor GetAllUsers() {
+        return Tools.UserListToCursor(users);
     }
 
     @Override
-    public ArrayList<Business> GetAllBusinesses() {
-        return null;
+    public Cursor GetAllBusinesses() {
+        return Tools.BusinessListToCursor(businesses);
     }
 
     @Override
-    public ArrayList<Activity> GetAllActivities() {
-        return null;
+    public Cursor GetAllActivities() {
+        return Tools.ActivityListToCursor(activities);
     }
 
     @Override

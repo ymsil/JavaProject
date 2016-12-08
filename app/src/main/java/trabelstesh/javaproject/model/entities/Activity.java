@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 public class Activity
 {
+    private int id;
     private Description description;
     private String country;
     private Calendar startDate;
@@ -11,6 +12,14 @@ public class Activity
     private int cost;
     private String shortDescription;
     private int Bid;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public Description getDescription() {
         return description;

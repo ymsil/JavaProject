@@ -1,6 +1,8 @@
 package trabelstesh.javaproject.model.backend;
 
 import android.app.Activity;
+import android.content.ContentValues;
+import android.database.Cursor;
 
 import java.util.ArrayList;
 
@@ -13,12 +15,12 @@ import trabelstesh.javaproject.model.entities.User;
 
 public interface DB_manager
 {
-    public void AddUser();
-    public void AddBuisness();
-    public void AddActivity();
-    public boolean IsNewActivityOrBuisness();
-    public ArrayList<User> GetAllUsers();
-    public ArrayList<Business> GetAllBusinesses();
-    public ArrayList<Activity> GetAllActivities();
-    public boolean isNewData();
+    long AddUser(ContentValues values);
+    long AddBuisness(ContentValues values);
+    long AddActivity(ContentValues values);
+    boolean IsNewActivityOrBuisness();
+    Cursor GetAllUsers();
+    Cursor GetAllBusinesses();
+    Cursor GetAllActivities();
+    boolean isNewData();
 }

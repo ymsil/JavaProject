@@ -6,16 +6,16 @@ package trabelstesh.javaproject.model.entities;
 
 public class User
 {
-    private int userId;
-    private String UserName;
+    private int Id;
+    private String Name;
     private String password;
 
-    public int getUserId() {
-        return userId;
+    public int getId() {
+        return Id;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setId(int Id) {
+        this.Id = Id;
     }
 
     public String getPassword() {
@@ -26,11 +26,11 @@ public class User
         this.password = password;
     }
 
-    public String getUserName() {
-        return UserName;
+    public String getName() {
+        return Name;
     }
 
-    public void setUserName(String userName) {
-        UserName = userName;
+    public void setName(String Name) {
+        this.Name = Name;
     }
 }
