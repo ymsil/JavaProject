@@ -1,10 +1,12 @@
 package trabelstesh.javaproject.model.backend;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 /**
  * Created by ymsil on 12/8/2016.
@@ -13,38 +15,118 @@ import android.support.annotation.Nullable;
 public class MyContentProvider extends ContentProvider
 {
     DB_manager manager = DBManagerFactory.getManager();
-    final String TAG = "ProjectContemt";
+    final String TAG = "ProjectContent";
 
     @Override
-    public boolean onCreate() {
+    public boolean onCreate()
+    {
+        Log.d(TAG, "onCreate");
         return false;
     }
 
     @Nullable
     @Override
-    public Cursor query(Uri uri, String[] strings, String s, String[] strings1, String s1) {
+    public Cursor query(Uri uri, String[] strings, String s, String[] strings1, String s1)
+    {
+        Log.d(TAG, "query " + uri.toString());
+
+        String listName = uri.getLastPathSegment();
+        switch (listName)
+        {
+            case "users":
+                return manager.GetAllUsers();
+            case "businesses":
+                return manager.GetAllBusinesses();
+            case "activities":
+                return manager.GetAllActivities();//
+        }
         return null;
     }
 
     @Nullable
     @Override
-    public String getType(Uri uri) {
+    public String getType(Uri uri)
+    {
+        Log.d(TAG, "getType " + uri.toString());
         return null;
     }
 
     @Nullable
     @Override
-    public Uri insert(Uri uri, ContentValues contentValues) {
+    public Uri insert(Uri uri, ContentValues contentValues)
+    {
+        Log.d(TAG, "insert " + uri.toString());
+
+        String listName = uri.getLastPathSegment();
+        long id = -1;
+        switch (listName)
+        {
+            case "users":
+            {
+                id = manager.AddUser(contentValues);
+                return ContentUris.withAppendedId(uri, id);
+            }
+            case "businesses":
+            {
+                id = manager.AddBusiness(contentValues);
+                return ContentUris.withAppendedId(uri, id);
+            }
+            case "activities":
+            {
+                id = manager.AddActivity(contentValues);
+                return ContentUris.withAppendedId(uri, id);
+            }
+        }
         return null;
     }
 
     @Override
-    public int delete(Uri uri, String s, String[] strings) {
+    public int delete(Uri uri, String s, String[] strings)
+    {
+        Log.d(TAG, "delete " + uri.toString());
+
+        String listName = uri.getLastPathSegment();
+        long id = ContentUris.parseId(uri);
+        switch (listName)
+        {
+            case "users":
+                if (manager.DeleteUser((int) id))
+                    return 1;
+                break;
+            case "businesses":
+                if (manager.DeleteBusiness((int) id))
+                    return 1;
+                break;
+            case "activities":
+                if (manager.DeleteActivity((int) id))
+                    return 1;
+                break;
+        }
         return 0;
     }
 
     @Override
-    public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
+    public int update(Uri uri, ContentValues contentValues, String s, String[] strings)
+    {
+        Log.d(TAG, "update " + uri.toString());
+
+        String listName = uri.getLastPathSegment();
+        long id = ContentUris.parseId(uri);
+        int indexToUpdate = -1;
+        switch (listName) {
+            case "users":
+                if (manager.UpdateUser((int) id, contentValues))
+                    return 1;
+                break;
+            case "businesses":
+                if (manager.UpdateBusiness((int) id, contentValues))
+                    return 1;
+                break;
+            case "activities":
+                if (manager.UpdateActivity((int) id, contentValues))
+                    return 1;
+                break;
+        }
         return 0;
     }
 }
