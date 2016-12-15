@@ -20,12 +20,21 @@
             android:name=".model.backend.MyContentProvider"
             android:authorities="trabelstesh.javaproject"
             android:enabled="true"
-            android:exported="true"></provider>
+            android:exported="true" />
 
         <service
             android:name=".model.backend.MyUpdateService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <receiver
+            android:name=".model.backend.MyReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="trabelstesh.javaproject.myreciever"
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
