@@ -27,8 +27,8 @@ public class MyContract
          */
         public static final Uri USER_URI = Uri.withAppendedPath(AUTHORITY_URI, "users");
     }
-
-    public static class Business {
+    public static class Business
+    {
         public static final String BUSINESS_ID = "_id";
         public static final String BUSINESS_NAME = "name";
         public static final String BUSINESS_ADDRESS = "address";
@@ -41,7 +41,8 @@ public class MyContract
          */
         public static final Uri BUSINESS_URI = Uri.withAppendedPath(AUTHORITY_URI, "businesses");
     }
-    public static class Activity {
+    public static class Activity
+    {
         public static final String ACTIVITY_ID = "id";
         public static final String ACTIVITY_DESCRIPTION = "description";
         public static final String ACTIVITY_COUNTRY = "country";

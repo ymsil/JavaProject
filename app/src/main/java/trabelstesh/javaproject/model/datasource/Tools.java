@@ -19,7 +19,6 @@ import trabelstesh.javaproject.model.entities.User;
 
 public class Tools
 {
-
     public static User ContentValuesToUser(ContentValues contentValues) {
         User user = new User();
         user.setId(contentValues.getAsInteger(MyContract.User.USER_ID));
