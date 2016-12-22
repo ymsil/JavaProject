@@ -1,12 +1,16 @@
 package trabelstesh.javaproject.controller;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 
 import trabelstesh.javaproject.R;
 import trabelstesh.javaproject.model.backend.DBManagerFactory;
@@ -167,11 +171,24 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void SignRegisterClick(View view) {
+        AutoCompleteTextView userName = (AutoCompleteTextView) findViewById(R.id.nametxt);
+        EditText Password = (EditText) findViewById(R.id.passwordtxt);
         DB_manager dbm = DBManagerFactory.getManager();
-        for (User u : dbm.GetAllUsers())
-        {
+        Cursor cursor = dbm.GetAllUsers();
+        try {
+            while (cursor.moveToNext()) {
+                if (((User) cursor).getName() == findViewById(R.id.nametxt).toString())
+                    if (((User) cursor).getPassword() == findViewById((R.id.passwordtxt)).toString()) {
+                        {
+                            Intent regintent = new Intent(this, MenuActivity.class);
+                            startActivity((regintent));
+                        }
+                    }
 
+
+            }
+        }finally {
+            //todo something.
         }
-
     }
 }
