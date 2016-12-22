@@ -8,12 +8,9 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-/**
- * Created by ymsil on 12/8/2016.
- */
+public class MyContentProvider extends ContentProvider {
+    public MyContentProvider() {}
 
-public class MyContentProvider extends ContentProvider
-{
     DB_manager manager = DBManagerFactory.getManager();
     final String TAG = "ProjectContent";
 
