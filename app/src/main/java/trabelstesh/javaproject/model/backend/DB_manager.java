@@ -24,9 +24,8 @@ public interface DB_manager
     boolean DeleteUser(int id);
     boolean DeleteBusiness(int id);
     boolean DeleteActivity(int id);
-    boolean IsNewActivityOrBusiness();
     Cursor GetAllUsers();
     Cursor GetAllBusinesses();
     Cursor GetAllActivities();
-    boolean isNewData();
+    boolean isUpdated();
 }

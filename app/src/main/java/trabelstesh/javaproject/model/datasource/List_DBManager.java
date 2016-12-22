@@ -20,6 +20,7 @@ public class List_DBManager implements DB_manager
     static List<User> users;
     static List<trabelstesh.javaproject.model.entities.Activity> activities;
     static List<Business> businesses;
+    public static boolean changed = false;
 
     static {
         users = new ArrayList<>();
@@ -38,6 +39,7 @@ public class List_DBManager implements DB_manager
     public int AddBusiness(ContentValues values) {
         Business business = Tools.ContentValuesToBusiness(values);
         businesses.add(business);
+        changed = true;
         return business.getId();
     }
 
@@ -45,6 +47,7 @@ public class List_DBManager implements DB_manager
     public int AddActivity(ContentValues values) {
         trabelstesh.javaproject.model.entities.Activity activity = Tools.ContentValuesToActivity(values);
         activities.add(activity);
+        changed = true;
         return activity.getId();
     }
 
@@ -73,6 +76,7 @@ public class List_DBManager implements DB_manager
                 businesses.get(i).setPhone(business.getPhone());
                 businesses.get(i).setEmail(business.getEmail());
                 businesses.get(i).setWebsite(business.getWebsite());
+                changed = true;
                 return true;
             }
         return false;
@@ -92,6 +96,7 @@ public class List_DBManager implements DB_manager
                 activities.get(i).setCost(activity.getCost());
                 activities.get(i).setShortDescription(activity.getShortDescription());
                 activities.get(i).setBusinessId(activity.getBusinessId());
+                changed = true;
                 return true;
             }
         return false;
@@ -118,6 +123,7 @@ public class List_DBManager implements DB_manager
                 businessToDelete = business;
                 break;
             }
+        changed = true;
         return businesses.remove(businessToDelete);
     }
 
@@ -130,6 +136,7 @@ public class List_DBManager implements DB_manager
                 activityToDelete = activity;
                 break;
             }
+        changed = true;
         return activities.remove(activityToDelete);
     }
 
@@ -149,12 +156,13 @@ public class List_DBManager implements DB_manager
     }
 
     @Override
-    public boolean isNewData() {
+    public boolean isUpdated()
+    {
+        if (changed)
+        {
+            changed = false;
+            return true;
+        }
         return false;
     }
-
-    @Override
-    public boolean IsNewActivityOrBusiness() {
-    return false;
-}
 }

@@ -10,8 +10,21 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="trabelstesh.javaproject.controller.MainActivity">
 
-    <TextView
+    <Button
+        android:text="Press here"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:id="@+id/welcome"
+        android:layout_centerVertical="true"
+        android:onClick="EnterClick"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="WELCOME"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/WelcomeText"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+
 </RelativeLayout>
