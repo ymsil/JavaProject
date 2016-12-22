@@ -29,14 +29,14 @@ public class List_DBManager implements DB_manager
     }
 
     @Override
-    public int AddUser(ContentValues values) {
+    public long AddUser(ContentValues values) {
         User user = Tools.ContentValuesToUser(values);
         users.add(user);
         return user.getId();
     }
 
     @Override
-    public int AddBusiness(ContentValues values) {
+    public long AddBusiness(ContentValues values) {
         Business business = Tools.ContentValuesToBusiness(values);
         businesses.add(business);
         changed = true;

@@ -10,6 +10,8 @@ public class User
     private String Name;
     private String password;
 
+    public User(){}
+
     public User(long userNum, String name, String password) {
         this.Id = userNum;
         this.Name = name;

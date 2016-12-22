@@ -51,6 +51,7 @@ public class Business
         this.website = website;
     }
 
+    public Business() {}
     public Business(long id, String name, String address, String phone, String email, String website) {
         this.id = id;
         this.name = name;

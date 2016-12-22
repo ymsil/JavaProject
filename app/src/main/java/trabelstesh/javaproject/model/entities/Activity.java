@@ -76,6 +76,7 @@ public class Activity
         this.shortDescription = shortDescription;
         BusinessId = businessId;
     }
+    public Activity() {}
 
     @Override
     public String toString() {
