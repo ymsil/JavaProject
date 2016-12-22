@@ -6,17 +6,18 @@ package trabelstesh.javaproject.model.entities;
 
 public class Business
 {
-    private int id;
+    private long id;
     private String name;
     private String address;
     private String Phone;
     private String email;
     private String website;
 
-    public int getId() {
+
+    public long getId() {
         return id;
     }
-    public void setId(int id) {
+    public long setId(int id) {
         this.id = id;
     }
     public String getName() {
@@ -49,4 +50,26 @@ public class Business
     public void setWebsite(String website) {
         this.website = website;
     }
+
+    public Business(long id, String name, String address, String phone, String email, String website) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        Phone = phone;
+        this.email = email;
+        this.website = website;
+    }
+
+    @Override
+    public String toString() {
+        return "Business{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", Phone='" + Phone + '\'' +
+                ", email='" + email + '\'' +
+                ", website='" + website + '\'' +
+                '}';
+    }
+
 }

@@ -65,4 +65,29 @@ public class Activity
     public void setBusinessId(int businessId) {
         BusinessId = businessId;
     }
+
+    public Activity(int id, Description description, String country, Calendar startDate, Calendar endDate, int cost, String shortDescription, int businessId) {
+        this.id = id;
+        this.description = description;
+        this.country = country;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.cost = cost;
+        this.shortDescription = shortDescription;
+        BusinessId = businessId;
+    }
+
+    @Override
+    public String toString() {
+        return "Activity{" +
+                "id=" + id +
+                ", description=" + description +
+                ", country='" + country + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", cost=" + cost +
+                ", shortDescription='" + shortDescription + '\'' +
+                ", BusinessId=" + BusinessId +
+                '}';
+    }
 }

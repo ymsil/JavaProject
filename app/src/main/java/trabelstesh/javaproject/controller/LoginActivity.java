@@ -9,6 +9,9 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import trabelstesh.javaproject.R;
+import trabelstesh.javaproject.model.backend.DBManagerFactory;
+import trabelstesh.javaproject.model.backend.DB_manager;
+import trabelstesh.javaproject.model.entities.User;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -161,5 +164,14 @@ public class LoginActivity extends AppCompatActivity {
     private void delayedHide(int delayMillis) {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
+    }
+
+    public void SignRegisterClick(View view) {
+        DB_manager dbm = DBManagerFactory.getManager();
+        for (User u : dbm.GetAllUsers())
+        {
+
+        }
+
     }
 }

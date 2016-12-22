@@ -6,15 +6,21 @@ package trabelstesh.javaproject.model.entities;
 
 public class User
 {
-    private int Id;
+    private long Id;
     private String Name;
     private String password;
 
-    public int getId() {
+    public User(long userNum, String name, String password) {
+        this.Id = userNum;
+        this.Name = name;
+        this.password = password;
+    }
+
+    public long getId() {
         return Id;
     }
 
-    public void setId(int Id) {
+    public void setId(long Id) {
         this.Id = Id;
     }
 
