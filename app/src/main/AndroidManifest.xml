@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="trabelstesh.javaproject">
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,19 +27,25 @@
             android:enabled="true"
             android:exported="true" />
 
-        <service
-            android:name=".model.backend.MyUpdateService"
-            android:enabled="true"
-            android:exported="true" />
-
         <receiver
             android:name=".model.backend.MyReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="trabelstesh.javaproject.myreceiver"/>
+                <action android:name="trabelstesh.javaproject.MyAction" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".model.backend.MyService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name=".controller.LoginActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_login"
+            android:theme="@style/FullscreenTheme" />
     </application>
 
 </manifest>

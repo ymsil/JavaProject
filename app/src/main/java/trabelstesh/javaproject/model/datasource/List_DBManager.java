@@ -17,27 +17,29 @@ import trabelstesh.javaproject.model.entities.User;
 
 public class List_DBManager implements DB_manager
 {
-    static List<User> users = new ArrayList<>();
-    static List<trabelstesh.javaproject.model.entities.Activity> activities = new ArrayList<>();
-    static List<Business> businesses = new ArrayList<>();
+    static List<User> users;
+    static List<trabelstesh.javaproject.model.entities.Activity> activities;
+    static List<Business> businesses;
+    public static boolean changed = false;
 
-    static boolean isNewAorB = false;
-    static boolean isNewChanges = false;
+    static {
+        users = new ArrayList<>();
+        activities = new ArrayList<>();
+        businesses = new ArrayList<>();
+    }
 
     @Override
-    public int AddUser(ContentValues values) {
+    public long AddUser(ContentValues values) {
         User user = Tools.ContentValuesToUser(values);
         users.add(user);
-        isNewChanges = true;
         return user.getId();
     }
 
     @Override
-    public int AddBusiness(ContentValues values) {
+    public long AddBusiness(ContentValues values) {
         Business business = Tools.ContentValuesToBusiness(values);
         businesses.add(business);
-        isNewChanges = true;
-        isNewAorB = true;
+        changed = true;
         return business.getId();
     }
 
@@ -45,8 +47,7 @@ public class List_DBManager implements DB_manager
     public int AddActivity(ContentValues values) {
         trabelstesh.javaproject.model.entities.Activity activity = Tools.ContentValuesToActivity(values);
         activities.add(activity);
-        isNewChanges = true;
-        isNewAorB = true;
+        changed = true;
         return activity.getId();
     }
 
@@ -58,7 +59,6 @@ public class List_DBManager implements DB_manager
             {
                 users.get(i).setName(user.getName());
                 users.get(i).setPassword(user.getPassword());
-                isNewChanges = true;
                 return true;
             }
         return false;
@@ -76,7 +76,7 @@ public class List_DBManager implements DB_manager
                 businesses.get(i).setPhone(business.getPhone());
                 businesses.get(i).setEmail(business.getEmail());
                 businesses.get(i).setWebsite(business.getWebsite());
-                isNewChanges = true;
+                changed = true;
                 return true;
             }
         return false;
@@ -96,7 +96,7 @@ public class List_DBManager implements DB_manager
                 activities.get(i).setCost(activity.getCost());
                 activities.get(i).setShortDescription(activity.getShortDescription());
                 activities.get(i).setBusinessId(activity.getBusinessId());
-                isNewChanges = true;
+                changed = true;
                 return true;
             }
         return false;
@@ -111,7 +111,6 @@ public class List_DBManager implements DB_manager
                 userToDelete = user;
                 break;
             }
-        isNewChanges = true;
         return users.remove(userToDelete);
     }
 
@@ -124,7 +123,7 @@ public class List_DBManager implements DB_manager
                 businessToDelete = business;
                 break;
             }
-        isNewChanges = true;
+        changed = true;
         return businesses.remove(businessToDelete);
     }
 
@@ -137,7 +136,7 @@ public class List_DBManager implements DB_manager
                 activityToDelete = activity;
                 break;
             }
-        isNewChanges = true;
+        changed = true;
         return activities.remove(activityToDelete);
     }
 
@@ -157,24 +156,13 @@ public class List_DBManager implements DB_manager
     }
 
     @Override
-    public boolean isNewData()
+    public boolean isUpdated()
     {
-        if(isNewChanges)
+        if (changed)
         {
-            isNewChanges = false;
-            return  true;
+            changed = false;
+            return true;
         }
         return false;
-    }
-
-    @Override
-    public boolean IsNewActivityOrBusiness()
-    {
-        if(isNewAorB)
-        {
-            isNewAorB = false;
-            return  true;
-        }
-    return false;
     }
 }
