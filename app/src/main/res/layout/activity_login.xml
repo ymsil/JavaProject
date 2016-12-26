@@ -21,6 +21,7 @@
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -90,7 +91,7 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
-                    android:id="@+id/email_sign_in_button"
+                    android:id="@+id/SignRegisterButton"
                     style="?android:textAppearanceSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -100,6 +101,14 @@
                     android:background="@color/colorPrimary"
                     android:onClick="SignRegisterClick"
                     />
+
+                <CheckBox
+                    android:text="Remember me?"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/RememberMe"
+                    android:layout_weight="1"
+                    android:textAllCaps="false" />
 
             </LinearLayout>
         </ScrollView>

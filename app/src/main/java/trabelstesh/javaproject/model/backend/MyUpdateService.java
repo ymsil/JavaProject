@@ -42,7 +42,7 @@ public class MyUpdateService extends Service
                     catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    if(DBManagerFactory.getManager().isNewData())
+                    if(DBManagerFactory.getManager().isUpdated())
                     {
                         Log.d(TAG,"isNewData run ..");
                         Intent updateIntent = new Intent("trabelstesh.javaproject.myreciever");

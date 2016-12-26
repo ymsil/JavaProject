@@ -2,7 +2,9 @@ package trabelstesh.javaproject.controller;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,11 +13,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import trabelstesh.javaproject.R;
 import trabelstesh.javaproject.model.backend.DBManagerFactory;
 import trabelstesh.javaproject.model.backend.DB_manager;
 import trabelstesh.javaproject.model.entities.User;
+
+import static trabelstesh.javaproject.R.id.RememberMe;
+import static trabelstesh.javaproject.R.id.nametxt;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -165,30 +171,43 @@ public class LoginActivity extends AppCompatActivity {
      * Schedules a call to hide() in [delay] milliseconds, canceling any
      * previously scheduled calls.
      */
+
     private void delayedHide(int delayMillis) {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
 
     public void SignRegisterClick(View view) {
+/*
         AutoCompleteTextView userName = (AutoCompleteTextView) findViewById(R.id.nametxt);
         EditText Password = (EditText) findViewById(R.id.passwordtxt);
+
+
+        if (findViewById(R.id.RememberMe).isSelected()) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            editor.putString("NAME", userName.toString());
+            editor.putString("PASSWORD", Password.toString());
+            editor.commit();
+        }
         DB_manager dbm = DBManagerFactory.getManager();
         Cursor cursor = dbm.GetAllUsers();
         try {
             while (cursor.moveToNext()) {
                 if (((User) cursor).getName() == findViewById(R.id.nametxt).toString())
+                    //User u = ((User) cursor);
                     if (((User) cursor).getPassword() == findViewById((R.id.passwordtxt)).toString()) {
-                        {
+                        {*/
                             Intent regintent = new Intent(this, MenuActivity.class);
                             startActivity((regintent));
-                        }
+                       /* }
                     }
 
 
             }
         }finally {
             //todo something.
-        }
+        }*/
     }
 }
