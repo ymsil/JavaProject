@@ -40,7 +40,8 @@ public class MenuActivity extends AppCompatActivity {
     private ViewPager mViewPager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
@@ -66,14 +67,15 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 ////////////////////////////////////// IM HERE!!!! ////////////////////////////////////////
-        final SimpleCursorAdapter adapter = new SimpleCursorAdapter
-                (
-                        this,
-                        R.layout.fragment_activity_sub_page,
-                        null,
-                        new String[]{Activity.class.getName()},
-                        new int[]{R.id.itemId, R.id.itemName}
-                );    }
+//        final SimpleCursorAdapter adapter = new SimpleCursorAdapter
+//                (
+//                        this,
+//                        R.layout.fragment_activity_sub_page,
+//                        null,
+//                        new String[]{Activity.class.getName()},
+//                        new int[]{R.id.itemId, R.id.itemName}
+//                );
+    }
 
 
     @Override

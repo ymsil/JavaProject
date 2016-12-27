@@ -44,7 +44,7 @@ public class MyUpdateService extends Service
                     }
                     if(DBManagerFactory.getManager().isUpdated())
                     {
-                        Log.d(TAG,"isNewData run ..");
+                        Log.d(TAG,"isUpdated run ..");
                         Intent updateIntent = new Intent("trabelstesh.javaproject.myreciever");
                         sendBroadcast(updateIntent);
                     }

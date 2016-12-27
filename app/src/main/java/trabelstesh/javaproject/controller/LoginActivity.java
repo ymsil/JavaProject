@@ -11,17 +11,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.Random;
 
 import trabelstesh.javaproject.R;
 import trabelstesh.javaproject.model.backend.DBManagerFactory;
 import trabelstesh.javaproject.model.backend.DB_manager;
 import trabelstesh.javaproject.model.entities.User;
-
-import static trabelstesh.javaproject.R.id.RememberMe;
-import static trabelstesh.javaproject.R.id.nametxt;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -101,7 +98,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_login);
 
         mVisible = true;
@@ -177,37 +173,75 @@ public class LoginActivity extends AppCompatActivity {
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
 
-    public void SignRegisterClick(View view) {
-/*
-        AutoCompleteTextView userName = (AutoCompleteTextView) findViewById(R.id.nametxt);
-        EditText Password = (EditText) findViewById(R.id.passwordtxt);
+    public void SignRegisterClick(View view)
+    {
+        /////NEED TO CHECK BUG - SOMETHING WRONG////
+        User user = new User();
+        String name = findViewById(R.id.nametxt).toString();
+        String password = findViewById(R.id.passwordtxt).toString();
 
+        user.setName(name);
+        user.setPassword(password);
 
-        if (findViewById(R.id.RememberMe).isSelected()) {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+        Toast toast = new Toast(this);
+        toast.setView(view);
 
-            editor.putString("NAME", userName.toString());
-            editor.putString("PASSWORD", Password.toString());
-            editor.commit();
-        }
         DB_manager dbm = DBManagerFactory.getManager();
-        Cursor cursor = dbm.GetAllUsers();
-        try {
-            while (cursor.moveToNext()) {
-                if (((User) cursor).getName() == findViewById(R.id.nametxt).toString())
-                    //User u = ((User) cursor);
-                    if (((User) cursor).getPassword() == findViewById((R.id.passwordtxt)).toString()) {
-                        {*/
-                            Intent regintent = new Intent(this, MenuActivity.class);
-                            startActivity((regintent));
-                       /* }
-                    }
+        Cursor users = dbm.GetAllUsers();
+        while (users.moveToNext())
+        {
+            if (((User) users).getName() == name)
+                if (((User) users).getPassword() == password)
+                {
+                    toast.setText("login successful");
+                    toast.setDuration(Toast.LENGTH_SHORT);
+                    toast.show();
+                    if (findViewById(R.id.RememberMe).isSelected()) SaveToSharedPreferences(user);
+                    Intent regintent = new Intent(this, MenuActivity.class);
+                    startActivity((regintent));
+                }
+                else
+                {
+                    toast.setText("wrong password");
+                    toast.setDuration(Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+        }
+        long randomID = GenerateNewID(users);
+        user.setId(randomID);
+        dbm.AddUser(user);
+        toast.setText("Welcome " + user.getName() + ". new user registered");
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.show();
+        if (findViewById(R.id.RememberMe).isSelected()) SaveToSharedPreferences(user);
+        Intent regintent = new Intent(this, MenuActivity.class);
+        startActivity((regintent));
+    }
 
+    private void SaveToSharedPreferences(User user)
+    {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-            }
-        }finally {
-            //todo something.
-        }*/
+        editor.putString("NAME", user.getName());
+        editor.putString("PASSWORD", user.getPassword());
+        editor.commit();
+    }
+
+    private long GenerateNewID(Cursor users)
+    {
+        Random random = new Random();
+        long newID = 0;
+        boolean isNew = false;
+
+        while (!isNew)
+        {
+            newID = random.nextInt(1000)+1;
+            isNew = true;
+            while (users.moveToNext())
+                if ( ((User)users).getId() == newID ) isNew = false;
+            if (isNew) return newID;
+        }
+        return newID;
     }
 }

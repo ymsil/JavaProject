@@ -29,8 +29,16 @@ public class List_DBManager implements DB_manager
     }
 
     @Override
-    public long AddUser(ContentValues values) {
+    public long AddUser(ContentValues values)
+    {
         User user = Tools.ContentValuesToUser(values);
+        users.add(user);
+        return user.getId();
+    }
+
+    @Override
+    public long AddUser(User user)
+    {
         users.add(user);
         return user.getId();
     }
@@ -141,7 +149,8 @@ public class List_DBManager implements DB_manager
     }
 
     @Override
-    public Cursor GetAllUsers() {
+    public Cursor GetAllUsers()
+    {
         return Tools.UserListToCursor(users);
     }
 
