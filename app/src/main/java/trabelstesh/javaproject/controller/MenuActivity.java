@@ -1,5 +1,6 @@
 package trabelstesh.javaproject.controller;
 
+import android.support.annotation.IdRes;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,10 +17,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.widget.TextView;
+import android.widget.SimpleCursorAdapter;
 
 import trabelstesh.javaproject.R;
+import trabelstesh.javaproject.model.entities.Activity;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -64,8 +65,15 @@ public class MenuActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-    }
+////////////////////////////////////// IM HERE!!!! ////////////////////////////////////////
+        final SimpleCursorAdapter adapter = new SimpleCursorAdapter
+                (
+                        this,
+                        R.layout.fragment_activity_sub_page,
+                        null,
+                        new String[]{Activity.class.getName()},
+                        new int[]{R.id.itemId, R.id.itemName}
+                );    }
 
 
     @Override
@@ -118,10 +126,23 @@ public class MenuActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_menu, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
+            if (getArguments().getInt(ARG_SECTION_NUMBER) ==1) {
+
+                View rootView = inflater.inflate(R.layout.fragment_menu_sub_page, container, false);
+                return rootView;
+            }
+            else if (getArguments().getInt(ARG_SECTION_NUMBER) ==2)   {
+
+                View rootView = inflater.inflate(R.layout.fragment_business_sub_page, container, false);
+                return rootView;
+            }
+
+            else {
+                View rootView = inflater.inflate(R.layout.fragment_activity_sub_page, container, false);
+                return rootView;
+            }
+
+
         }
     }
 
@@ -152,11 +173,11 @@ public class MenuActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return "MENU";
                 case 1:
-                    return "SECTION 2";
+                    return "Businesses";
                 case 2:
-                    return "SECTION 3";
+                    return "Activities";
             }
             return null;
         }
