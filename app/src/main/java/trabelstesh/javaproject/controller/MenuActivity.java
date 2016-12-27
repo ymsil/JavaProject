@@ -1,5 +1,6 @@
 package trabelstesh.javaproject.controller;
 
+import android.support.annotation.IdRes;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,8 +17,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SimpleCursorAdapter;
 
 import trabelstesh.javaproject.R;
+import trabelstesh.javaproject.model.entities.Activity;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -62,8 +65,15 @@ public class MenuActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-    }
+////////////////////////////////////// IM HERE!!!! ////////////////////////////////////////
+        final SimpleCursorAdapter adapter = new SimpleCursorAdapter
+                (
+                        this,
+                        R.layout.fragment_activity_sub_page,
+                        null,
+                        new String[]{Activity.class.getName()},
+                        new int[]{R.id.itemId, R.id.itemName}
+                );    }
 
 
     @Override
