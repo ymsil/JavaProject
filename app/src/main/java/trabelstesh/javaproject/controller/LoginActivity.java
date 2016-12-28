@@ -32,7 +32,6 @@ public class LoginActivity extends AppCompatActivity
     SharedPreferences sharedPreferences;
     TextView nameTextView;
     TextView passwordTextView;
-    public static final String MYPREFERENCE = "mypref";
     public static final String NAME_KEY = "nameKey";
     public static final String PASSWORD_KEY = "passwordKey";
     boolean isChecked;
@@ -106,7 +105,7 @@ public class LoginActivity extends AppCompatActivity
             return false;        }
     };
 
-        @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
