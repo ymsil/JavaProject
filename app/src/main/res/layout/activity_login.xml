@@ -108,7 +108,9 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/RememberMe"
                     android:layout_weight="1"
-                    android:textAllCaps="false" />
+                    android:textAllCaps="false"
+                    android:checked="true"
+                    android:onClick="Unchecked"/>
 
             </LinearLayout>
         </ScrollView>

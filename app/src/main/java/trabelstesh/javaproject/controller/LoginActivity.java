@@ -1,8 +1,10 @@
 package trabelstesh.javaproject.controller;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
@@ -11,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Random;
@@ -24,7 +27,17 @@ import trabelstesh.javaproject.model.entities.User;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity
+{
+    SharedPreferences sharedPreferences;
+    TextView nameTextView;
+    TextView passwordTextView;
+    public static final String MYPREFERENCE = "mypref";
+    public static final String NAME_KEY = "nameKey";
+    public static final String PASSWORD_KEY = "passwordKey";
+    boolean isChecked;
+
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -85,26 +98,32 @@ public class LoginActivity extends AppCompatActivity {
      * system UI. This is to prevent the jarring behavior of controls going away
      * while interacting with activity UI.
      */
-    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
+    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener()
+    {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (AUTO_HIDE) {
-                delayedHide(AUTO_HIDE_DELAY_MILLIS);
-            }
-            return false;
-        }
+            if (AUTO_HIDE) delayedHide(AUTO_HIDE_DELAY_MILLIS);
+            return false;        }
     };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+        @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        isChecked = true;
+        nameTextView = (TextView) findViewById(R.id.nametxt);
+        passwordTextView = (TextView) findViewById(R.id.passwordtxt);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sharedPreferences.contains(NAME_KEY))
+            nameTextView.setText(sharedPreferences.getString(NAME_KEY, null));
+        if (sharedPreferences.contains(PASSWORD_KEY))
+            passwordTextView.setText(sharedPreferences.getString(PASSWORD_KEY, null));
 
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
-
-
         // Set up the user interaction to manually show or hide the system UI.
         mContentView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,13 +131,11 @@ public class LoginActivity extends AppCompatActivity {
                 toggle();
             }
         });
-
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
     }
-
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -128,7 +145,6 @@ public class LoginActivity extends AppCompatActivity {
         // are available.
         delayedHide(100);
     }
-
     private void toggle() {
         if (mVisible) {
             hide();
@@ -136,7 +152,6 @@ public class LoginActivity extends AppCompatActivity {
             show();
         }
     }
-
     private void hide() {
         // Hide UI first
         ActionBar actionBar = getSupportActionBar();
@@ -150,7 +165,6 @@ public class LoginActivity extends AppCompatActivity {
         mHideHandler.removeCallbacks(mShowPart2Runnable);
         mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
     }
-
     @SuppressLint("InlinedApi")
     private void show() {
         // Show the system bar
@@ -162,12 +176,10 @@ public class LoginActivity extends AppCompatActivity {
         mHideHandler.removeCallbacks(mHidePart2Runnable);
         mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
     }
-
     /**
      * Schedules a call to hide() in [delay] milliseconds, canceling any
      * previously scheduled calls.
      */
-
     private void delayedHide(int delayMillis) {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
@@ -175,16 +187,12 @@ public class LoginActivity extends AppCompatActivity {
 
     public void SignRegisterClick(View view)
     {
-        /////NEED TO CHECK BUG - SOMETHING WRONG////
         User user = new User();
-        String name = findViewById(R.id.nametxt).toString();
-        String password = findViewById(R.id.passwordtxt).toString();
+        String name = nameTextView.getText().toString();
+        String password = passwordTextView.getText().toString();
 
         user.setName(name);
         user.setPassword(password);
-
-        Toast toast = new Toast(this);
-        toast.setView(view);
 
         DB_manager dbm = DBManagerFactory.getManager();
         Cursor users = dbm.GetAllUsers();
@@ -193,38 +201,34 @@ public class LoginActivity extends AppCompatActivity {
             if (((User) users).getName() == name)
                 if (((User) users).getPassword() == password)
                 {
-                    toast.setText("login successful");
-                    toast.setDuration(Toast.LENGTH_SHORT);
-                    toast.show();
-                    if (findViewById(R.id.RememberMe).isSelected()) SaveToSharedPreferences(user);
+                    Toast.makeText(getApplicationContext(), "login successful",
+                            Toast.LENGTH_SHORT).show();
+                    if (isChecked) SaveToSharedPreferences(user);
                     Intent regintent = new Intent(this, MenuActivity.class);
                     startActivity((regintent));
                 }
                 else
                 {
-                    toast.setText("wrong password");
-                    toast.setDuration(Toast.LENGTH_SHORT);
-                    toast.show();
+                    Toast.makeText(getApplicationContext(), "wrong password",
+                            Toast.LENGTH_SHORT).show();
                 }
         }
         long randomID = GenerateNewID(users);
         user.setId(randomID);
         dbm.AddUser(user);
-        toast.setText("Welcome " + user.getName() + ". new user registered");
-        toast.setDuration(Toast.LENGTH_SHORT);
-        toast.show();
-        if (findViewById(R.id.RememberMe).isSelected()) SaveToSharedPreferences(user);
+        Toast.makeText(getApplicationContext(), "Welcome " + user.getName() + ". new user registered",
+                Toast.LENGTH_SHORT).show();
+        if (isChecked) SaveToSharedPreferences(user);
         Intent regintent = new Intent(this, MenuActivity.class);
         startActivity((regintent));
     }
 
     private void SaveToSharedPreferences(User user)
     {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.putString("NAME", user.getName());
-        editor.putString("PASSWORD", user.getPassword());
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        Editor editor = sharedPreferences.edit();
+        editor.putString(NAME_KEY, user.getName());
+        editor.putString(PASSWORD_KEY, user.getPassword());
         editor.commit();
     }
 
@@ -243,5 +247,16 @@ public class LoginActivity extends AppCompatActivity {
             if (isNew) return newID;
         }
         return newID;
+    }
+
+    public void Unchecked(View view)
+    {
+        isChecked = !isChecked;
+        if (!isChecked)
+        {
+            Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.commit();
+        }
     }
 }
