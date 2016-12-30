@@ -98,7 +98,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/AddNewBusinessButton"
-            android:onClick="AddBusiness"
             android:layout_weight="1
             "/>
 
@@ -107,7 +106,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/noNewBusinessButton"
-            android:onClick="Back"
             android:layout_weight="1"/>
     </TableRow>
 </LinearLayout>

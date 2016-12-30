@@ -2,6 +2,7 @@ package trabelstesh.javaproject.controller;
 
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -90,6 +91,8 @@ public class TroubleActivity extends AppCompatActivity {
 
     public void AddActivity(View view)
     {
+        Intent regintent = new Intent(this, AddActivityActivity.class);
+        startActivity((regintent));
     }
 
     public void AllBusinesses(View view)
