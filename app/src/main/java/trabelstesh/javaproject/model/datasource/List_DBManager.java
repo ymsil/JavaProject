@@ -6,7 +6,7 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
-import trabelstesh.javaproject.model.backend.DB_manager;
+import trabelstesh.javaproject.model.backend.IDB_manager;
 import trabelstesh.javaproject.model.entities.Activity;
 import trabelstesh.javaproject.model.entities.Business;
 import trabelstesh.javaproject.model.entities.User;
@@ -15,7 +15,7 @@ import trabelstesh.javaproject.model.entities.User;
  * Created by ymsil on 12/8/2016.
  */
 
-public class List_DBManager implements DB_manager
+public class List_DBManager implements IDB_manager
 {
     static List<User> users;
     static List<trabelstesh.javaproject.model.entities.Activity> activities;
@@ -32,13 +32,6 @@ public class List_DBManager implements DB_manager
     public long AddUser(ContentValues values)
     {
         User user = Tools.ContentValuesToUser(values);
-        users.add(user);
-        return user.getId();
-    }
-
-    @Override
-    public long AddUser(User user)
-    {
         users.add(user);
         return user.getId();
     }

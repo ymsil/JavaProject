@@ -8,9 +8,9 @@ import trabelstesh.javaproject.model.datasource.List_DBManager;
 
 public class DBManagerFactory
 {
-    static DB_manager manager = null;
+    static IDB_manager manager = null;
 
-    public static DB_manager getManager() {
+    public static IDB_manager getManager() {
         if (manager == null)
             manager = new List_DBManager();
         return manager;

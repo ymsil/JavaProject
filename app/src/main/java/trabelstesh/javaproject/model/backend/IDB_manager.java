@@ -13,10 +13,9 @@ import trabelstesh.javaproject.model.entities.User;
  * Created by ymsil on 12/8/2016.
  */
 
-public interface DB_manager
+public interface IDB_manager
 {
     long AddUser(ContentValues values);
-    long AddUser(User user);
     long AddBusiness(ContentValues values);
     int AddActivity(ContentValues values);
     boolean UpdateUser(int id, ContentValues contentValues);

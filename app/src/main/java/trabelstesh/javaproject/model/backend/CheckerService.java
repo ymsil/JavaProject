@@ -6,9 +6,9 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-public class MyService extends Service {
-    final  String TAG = "myservice";
-    public MyService() {
+public class CheckerService extends Service {
+    final  String TAG = "checkerservice";
+    public CheckerService() {
     }
 
     @Override
@@ -53,7 +53,7 @@ public class MyService extends Service {
                     {
                         Log.d(TAG,"isUpdated run ..");
                         Intent intent1 = new Intent("trabelstesh.javaproject.MyAction");
-                        MyService.this.sendBroadcast(intent1);
+                        CheckerService.this.sendBroadcast(intent1);
                         //sendBroadcast(intent);
                     }
 

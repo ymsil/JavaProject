@@ -37,7 +37,7 @@
         </receiver>
 
         <service
-            android:name=".model.backend.MyService"
+            android:name=".model.backend.CheckerService"
             android:enabled="true"
             android:exported="true" />
 
@@ -49,7 +49,9 @@
         <activity
             android:name=".controller.MenuActivity"
             android:label="@string/title_activity_menu"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".controller.TroubleActivity" />
+        <activity android:name=".controller.AddActivityActivity"></activity>
     </application>
 
 </manifest>

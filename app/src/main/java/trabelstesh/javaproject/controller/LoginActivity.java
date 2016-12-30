@@ -1,7 +1,7 @@
 package trabelstesh.javaproject.controller;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -20,7 +20,9 @@ import java.util.Random;
 
 import trabelstesh.javaproject.R;
 import trabelstesh.javaproject.model.backend.DBManagerFactory;
-import trabelstesh.javaproject.model.backend.DB_manager;
+import trabelstesh.javaproject.model.backend.IDB_manager;
+import trabelstesh.javaproject.model.backend.MyContract;
+import trabelstesh.javaproject.model.datasource.Tools;
 import trabelstesh.javaproject.model.entities.User;
 
 /**
@@ -193,7 +195,7 @@ public class LoginActivity extends AppCompatActivity
         user.setName(name);
         user.setPassword(password);
 
-        DB_manager dbm = DBManagerFactory.getManager();
+        IDB_manager dbm = DBManagerFactory.getManager();
         Cursor users = dbm.GetAllUsers();
         while (users.moveToNext())
         {
@@ -203,7 +205,8 @@ public class LoginActivity extends AppCompatActivity
                     Toast.makeText(getApplicationContext(), "login successful",
                             Toast.LENGTH_SHORT).show();
                     if (isChecked) SaveToSharedPreferences(user);
-                    Intent regintent = new Intent(this, MenuActivity.class);
+                    //Intent regintent = new Intent(this, MenuActivity.class);
+                    Intent regintent = new Intent(this, TroubleActivity.class);
                     startActivity((regintent));
                 }
                 else
@@ -214,11 +217,17 @@ public class LoginActivity extends AppCompatActivity
         }
         long randomID = GenerateNewID(users);
         user.setId(randomID);
-        dbm.AddUser(user);
+        ContentValues cv = new ContentValues();
+        cv.put(MyContract.User.USER_ID, user.getId());
+        cv.put(MyContract.User.USER_NAME, user.getName());
+        cv.put(MyContract.User.USER_PASSWORD, user.getPassword());
+        dbm.AddUser(cv);
+
         Toast.makeText(getApplicationContext(), "Welcome " + user.getName() + ". new user registered",
                 Toast.LENGTH_SHORT).show();
         if (isChecked) SaveToSharedPreferences(user);
-        Intent regintent = new Intent(this, MenuActivity.class);
+        //Intent regintent = new Intent(this, MenuActivity.class);
+        Intent regintent = new Intent(this, TroubleActivity.class);
         startActivity((regintent));
     }
 

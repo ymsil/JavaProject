@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:scrollbars="vertical"
+    android:nestedScrollingEnabled="true"
+    android:isScrollContainer="true">
+
+    <TextView
+        android:text="Enter Business details:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/addBusinessTextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+    <TextView
+        android:text="Business name:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/BusinessNameTextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/businessNameText"
+        android:hint="enter business name"/>
+
+    <TextView
+        android:text="Address:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/AddressTextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPostalAddress"
+        android:ems="10"
+        android:id="@+id/addressText"
+        android:hint="enter address"/>
+
+    <TextView
+        android:text="Phone:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/PhoneTextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:ems="10"
+        android:id="@+id/PhoneText"
+        android:hint="enter phone"/>
+
+    <TextView
+        android:text="Email:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/EmailTextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/emailText"
+        android:hint="enter email"/>
+
+    <TextView
+        android:text="Website:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/WebsiteTextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textWebEditText"
+        android:ems="10"
+        android:id="@+id/webText"
+        android:hint="enter website"/>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <Button
+            android:text="Add Business"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/AddNewBusinessButton"
+            android:onClick="AddBusiness"
+            android:layout_weight="1
+            "/>
+
+        <Button
+            android:text="Cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/noNewBusinessButton"
+            android:onClick="Back"
+            android:layout_weight="1"/>
+    </TableRow>
+</LinearLayout>

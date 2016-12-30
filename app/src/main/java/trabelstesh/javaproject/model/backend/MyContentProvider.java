@@ -11,7 +11,7 @@ import android.util.Log;
 public class MyContentProvider extends ContentProvider {
     public MyContentProvider() {}
 
-    DB_manager manager = DBManagerFactory.getManager();
+    IDB_manager manager = DBManagerFactory.getManager();
     final String TAG = "ProjectContent";
 
     @Override
