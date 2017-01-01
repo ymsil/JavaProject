@@ -45,7 +45,7 @@ public class List_DBManager implements IDB_manager
     }
 
     @Override
-    public int AddActivity(ContentValues values) {
+    public long AddActivity(ContentValues values) {
         trabelstesh.javaproject.model.entities.Activity activity = Tools.ContentValuesToActivity(values);
         activities.add(activity);
         changed = true;
@@ -148,7 +148,8 @@ public class List_DBManager implements IDB_manager
     }
 
     @Override
-    public Cursor GetAllBusinesses() {
+    public Cursor GetAllBusinesses()
+    {
         return Tools.BusinessListToCursor(businesses);
     }
 

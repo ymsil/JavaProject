@@ -20,7 +20,8 @@ import trabelstesh.javaproject.model.backend.MyContract;
 import trabelstesh.javaproject.model.entities.Business;
 import trabelstesh.javaproject.model.entities.User;
 
-public class TroubleActivity extends AppCompatActivity {
+public class TroubleActivity extends AppCompatActivity
+{
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -36,19 +37,6 @@ public class TroubleActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.addbusiness_dialog);
         dialog.show();
 
-        final EditText nameText = (EditText)dialog.findViewById(R.id.businessNameText);
-        final EditText addressText = (EditText)dialog.findViewById(R.id.addressText);
-        final EditText phoneText = (EditText)dialog.findViewById(R.id.PhoneText);
-        final EditText emailText = (EditText)dialog.findViewById(R.id.emailText);
-        final EditText websiteText = (EditText)dialog.findViewById(R.id.webText);
-
-        final Business newBusiness = new Business();
-        newBusiness.setName(nameText.getText().toString());
-        newBusiness.setAddress(addressText.getText().toString());
-        newBusiness.setPhone(phoneText.getText().toString());
-        newBusiness.setEmail(emailText.getText().toString());
-        newBusiness.setWebsite(websiteText.getText().toString());
-
         final IDB_manager dbm = DBManagerFactory.getManager();
 
         Button addBusinessButton = (Button)dialog.findViewById(R.id.AddNewBusinessButton);
@@ -59,9 +47,21 @@ public class TroubleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                String bName = nameText.getText().toString();
+
+                EditText nameText = (EditText)dialog.findViewById(R.id.businessNameText);
+                EditText addressText = (EditText)dialog.findViewById(R.id.addressText);
+                EditText phoneText = (EditText)dialog.findViewById(R.id.PhoneText);
+                EditText emailText = (EditText)dialog.findViewById(R.id.emailText);
+                EditText websiteText = (EditText)dialog.findViewById(R.id.webText);
+
+                Business newBusiness = new Business();
                 long bId = GenerateNewID(dbm.GetAllBusinesses());
                 newBusiness.setId(bId);
+                newBusiness.setName(nameText.getText().toString());
+                newBusiness.setAddress(addressText.getText().toString());
+                newBusiness.setPhone(phoneText.getText().toString());
+                newBusiness.setEmail(emailText.getText().toString());
+                newBusiness.setWebsite(websiteText.getText().toString());
 
                 ContentValues cv = new ContentValues();
                 cv.put(MyContract.Business.BUSINESS_ID, newBusiness.getId());
@@ -72,7 +72,7 @@ public class TroubleActivity extends AppCompatActivity {
                 cv.put(MyContract.Business.BUSINESS_WEBSITE, newBusiness.getWebsite());
                 dbm.AddBusiness(cv);
 
-                Toast.makeText(getApplicationContext(), bName + " Business added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), newBusiness.getName() + " Business added", Toast.LENGTH_SHORT).show();
                 dialog.cancel();
             }
         });
@@ -97,10 +97,15 @@ public class TroubleActivity extends AppCompatActivity {
 
     public void AllBusinesses(View view)
     {
+        Intent regintent = new Intent(this, AllBusinessesActivity.class);
+        startActivity((regintent));
     }
 
     public void AllActivities(View view)
     {
+        //need to find and fix bug first....
+//        Intent regintent = new Intent(this, AllActivitiesActivity.class);
+//        startActivity((regintent));
     }
 
     private long GenerateNewID(Cursor businesses)
@@ -108,13 +113,14 @@ public class TroubleActivity extends AppCompatActivity {
         Random random = new Random();
         long newID = 0;
         boolean isNew = false;
+        int idColumnIndex = businesses.getColumnIndex(MyContract.Business.BUSINESS_ID);
 
         while (!isNew)
         {
             newID = random.nextInt(1000)+1;
             isNew = true;
             while (businesses.moveToNext())
-                if ( ((Business)businesses).getId() == newID ) isNew = false;
+                if (businesses.getLong(idColumnIndex) == newID) isNew = false;
             if (isNew) return newID;
         }
         return newID;

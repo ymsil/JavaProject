@@ -6,19 +6,19 @@ import java.util.Calendar;
 
 public class Activity
 {
-    private int id;
+    private long id;
     private Description description;
     private String country;
     private Calendar startDate;
     private Calendar endDate;
     private int cost;
     private String shortDescription;
-    private int BusinessId;
+    private long BusinessId;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
     public Description getDescription() {
@@ -59,14 +59,14 @@ public class Activity
     public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
     }
-    public int getBusinessId() {
+    public Long getBusinessId() {
         return BusinessId;
     }
-    public void setBusinessId(int businessId) {
+    public void setBusinessId(Long businessId) {
         BusinessId = businessId;
     }
 
-    public Activity(int id, Description description, String country, Calendar startDate, Calendar endDate, int cost, String shortDescription, int businessId) {
+    public Activity(int id, Description description, String country, Calendar startDate, Calendar endDate, int cost, String shortDescription, Long businessId) {
         this.id = id;
         this.description = description;
         this.country = country;
@@ -74,7 +74,7 @@ public class Activity
         this.endDate = endDate;
         this.cost = cost;
         this.shortDescription = shortDescription;
-        BusinessId = businessId;
+        this.BusinessId = businessId;
     }
     public Activity() {}
 

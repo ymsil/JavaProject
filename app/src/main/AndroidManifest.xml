@@ -51,7 +51,15 @@
             android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".controller.TroubleActivity" />
-        <activity android:name=".controller.AddActivityActivity"></activity>
+        <activity android:name=".controller.AddActivityActivity" />
+        <activity
+            android:name=".controller.AllBusinessesActivity"
+            android:label="@string/title_activity_all_businesses"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".controller.AllActivitiesActivity"
+            android:label="@string/title_activity_all_activities"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

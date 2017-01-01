@@ -17,7 +17,7 @@ public interface IDB_manager
 {
     long AddUser(ContentValues values);
     long AddBusiness(ContentValues values);
-    int AddActivity(ContentValues values);
+    long AddActivity(ContentValues values);
     boolean UpdateUser(int id, ContentValues contentValues);
     boolean UpdateBusiness(int id, ContentValues contentValues);
     boolean UpdateActivity(int id, ContentValues contentValues);

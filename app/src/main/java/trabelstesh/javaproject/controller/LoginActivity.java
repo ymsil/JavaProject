@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -225,6 +227,8 @@ public class LoginActivity extends AppCompatActivity
 
         Toast.makeText(getApplicationContext(), "Welcome " + user.getName() + ". new user registered",
                 Toast.LENGTH_SHORT).show();
+//        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coo)
+//        Snackbar snackbar = Snackbar.make(coordinatorLayout, "Welcome " + user.getName() + ". new user registered", Snackbar.LENGTH_LONG).show();
         if (isChecked) SaveToSharedPreferences(user);
         //Intent regintent = new Intent(this, MenuActivity.class);
         Intent regintent = new Intent(this, TroubleActivity.class);

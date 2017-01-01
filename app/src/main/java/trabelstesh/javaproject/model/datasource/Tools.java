@@ -49,7 +49,7 @@ public class Tools
         activity.setEndDate((Calendar) contentValues.get(MyContract.Activity.ACTIVITY_END_DATE));
         activity.setCost(contentValues.getAsInteger(MyContract.Activity.ACTIVITY_COST));
         activity.setShortDescription(contentValues.getAsString(MyContract.Activity.ACTIVITY_SHORT_DESCRIPTION));
-        activity.setBusinessId(contentValues.getAsInteger(MyContract.Activity.ACTIVITY_BUSINESS_ID));
+        activity.setBusinessId(contentValues.getAsLong(MyContract.Activity.ACTIVITY_BUSINESS_ID));
 
         return activity;
     }
@@ -84,7 +84,8 @@ public class Tools
                 };
         MatrixCursor matrixCursor = new MatrixCursor(columns);
 
-        for (Business business : businesses) {
+        for (Business business : businesses)
+        {
             matrixCursor.addRow(new Object[]{business.getId(), business.getName(), business.getAddress(),
                     business.getPhone(), business.getEmail(), business.getWebsite()});
         }
