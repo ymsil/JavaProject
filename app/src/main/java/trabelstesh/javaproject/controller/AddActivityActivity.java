@@ -40,6 +40,11 @@ public class AddActivityActivity extends AppCompatActivity {
         Spinner ActivitySpinner = (Spinner) findViewById(R.id.descriptionSpinner);
         String[] Desc = DescriptionWithSpaces(Description.values());
         ActivitySpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Desc));
+        TextView startDateText = (TextView) findViewById(R.id.startDateText);
+        TextView endDateText = (TextView) findViewById(R.id.endDateText);
+        String today = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        startDateText.setText(today);
+        endDateText.setText(today);
 //        Description description = null;
 //
 //        ActivitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
@@ -113,12 +118,14 @@ public class AddActivityActivity extends AppCompatActivity {
         IDB_manager dbm = DBManagerFactory.getManager();
 
         Spinner descriptionSpinner =(Spinner) findViewById(R.id.descriptionSpinner);
-        String description = descriptionSpinner.getSelectedItem().toString();
+        String description = descriptionSpinner.getSelectedItem().toString().replaceAll(" ", "_");
         EditText countryText = (EditText)view.findViewById(R.id.countryText);
         TextView startDateText = (TextView)view.findViewById(R.id.startDateText);
-        Calendar startDate = FromStringToCalendar(startDateText.getText().toString());
+//        Calendar startDate = FromStringToCalendar(startDateText.getText().toString());
+        String startDate = startDateText.getText().toString();
         TextView endDateText = (TextView) view.findViewById(R.id.endDateText);
-        Calendar endDate = FromStringToCalendar(endDateText.getText().toString());
+//        Calendar endDate = FromStringToCalendar(endDateText.getText().toString());
+        String endDate = endDateText.getText().toString();
         EditText costText = (EditText)view.findViewById(R.id.CostText);
         EditText shortDescText = (EditText)view.findViewById(R.id.shortDescText);
         Spinner bIdSpinner = (Spinner)view.findViewById(R.id.businessSpinner);
@@ -131,8 +138,8 @@ public class AddActivityActivity extends AppCompatActivity {
         newActivity.setId(aId);
         newActivity.setDescription(description);
         newActivity.setCountry(countryText.getText().toString());
-        newActivity.setStartDate(startDate);
-        newActivity.setEndDate(endDate);
+        newActivity.setStartDate(new SimpleDateFormat("dd/MM/yy").parse(startDate));
+        newActivity.setEndDate(new SimpleDateFormat("dd/MM/yy").parse(endDate));
         newActivity.setCost(Integer.parseInt(costText.getText().toString()));
         newActivity.setShortDescription(shortDescText.getText().toString());
         newActivity.setBusinessId(bId);
@@ -165,9 +172,12 @@ public class AddActivityActivity extends AppCompatActivity {
     {
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         Calendar cal  = Calendar.getInstance();
-        try {
+        try
+        {
             cal.setTime(df.parse(stringDate));
-        } catch (ParseException e) {
+        }
+        catch (ParseException e)
+        {
             e.printStackTrace();
         }
         return cal;

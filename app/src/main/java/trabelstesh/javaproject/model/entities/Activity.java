@@ -3,14 +3,15 @@ package trabelstesh.javaproject.model.entities;
 import android.widget.Switch;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class Activity
 {
     private long id;
     private Description description;
     private String country;
-    private Calendar startDate;
-    private Calendar endDate;
+    private Date startDate;
+    private Date endDate;
     private int cost;
     private String shortDescription;
     private long BusinessId;
@@ -35,16 +36,16 @@ public class Activity
     public void setCountry(String country) {
         this.country = country;
     }
-    public Calendar getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
-    public void setStartDate(Calendar startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
-    public Calendar getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
-    public void setEndDate(Calendar endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
     public int getCost() {
@@ -66,7 +67,7 @@ public class Activity
         BusinessId = businessId;
     }
 
-    public Activity(int id, Description description, String country, Calendar startDate, Calendar endDate, int cost, String shortDescription, Long businessId) {
+    public Activity(long id, Description description, String country, Date startDate, Date endDate, int cost, String shortDescription, long businessId) {
         this.id = id;
         this.description = description;
         this.country = country;

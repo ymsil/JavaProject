@@ -6,8 +6,6 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-import trabelstesh.javaproject.controller.BusinessCursorAdapter;
-
 public class CheckerService extends Service {
     final  String TAG = "checkerservice";
     public CheckerService() {

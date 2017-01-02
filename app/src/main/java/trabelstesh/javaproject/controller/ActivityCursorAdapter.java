@@ -2,10 +2,10 @@ package trabelstesh.javaproject.controller;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import trabelstesh.javaproject.R;
@@ -47,7 +47,7 @@ public class ActivityCursorAdapter extends CursorAdapter
         String endDate = cursor.getString((cursor.getColumnIndexOrThrow(MyContract.Activity.ACTIVITY_END_DATE)));
         String cost = cursor.getString((cursor.getColumnIndexOrThrow(MyContract.Activity.ACTIVITY_COST)));
         String shortDesc = cursor.getString((cursor.getColumnIndexOrThrow(MyContract.Activity.ACTIVITY_SHORT_DESCRIPTION)));
-        String bId = cursor.getString((cursor.getColumnIndexOrThrow(MyContract.Activity.ACTIVITY_BUSINESS_ID)));
+        long bId = cursor.getLong(cursor.getColumnIndexOrThrow(MyContract.Activity.ACTIVITY_BUSINESS_ID));
 
         tvAID.setText(String.valueOf(id));
         tvDesc.setText(desc);
@@ -56,6 +56,6 @@ public class ActivityCursorAdapter extends CursorAdapter
         tvEndDate.setText(endDate);
         tvCost.setText(cost);
         tvShortDesc.setText(shortDesc);
-        tvBid.setText(bId);
+        tvBid.setText(String.valueOf(bId));
     }
 }

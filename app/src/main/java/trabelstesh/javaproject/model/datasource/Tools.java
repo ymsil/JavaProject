@@ -4,7 +4,11 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import trabelstesh.javaproject.model.backend.MyContract;
@@ -40,16 +44,26 @@ public class Tools
         return business;
     }
 
-    public static trabelstesh.javaproject.model.entities.Activity ContentValuesToActivity(ContentValues contentValues) {
+    public static trabelstesh.javaproject.model.entities.Activity ContentValuesToActivity(ContentValues contentValues)
+    {
         Activity activity = new Activity();
-        activity.setId(contentValues.getAsInteger(MyContract.Activity.ACTIVITY_ID));
-        activity.setDescription(contentValues.getAsString(MyContract.Activity.ACTIVITY_DESCRIPTION));
-        activity.setCountry(contentValues.getAsString(MyContract.Activity.ACTIVITY_COUNTRY));
-        activity.setStartDate((Calendar) contentValues.get(MyContract.Activity.ACTIVITY_START_DATE));
-        activity.setEndDate((Calendar) contentValues.get(MyContract.Activity.ACTIVITY_END_DATE));
-        activity.setCost(contentValues.getAsInteger(MyContract.Activity.ACTIVITY_COST));
-        activity.setShortDescription(contentValues.getAsString(MyContract.Activity.ACTIVITY_SHORT_DESCRIPTION));
-        activity.setBusinessId(contentValues.getAsLong(MyContract.Activity.ACTIVITY_BUSINESS_ID));
+
+        try {
+            DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            activity.setId(contentValues.getAsInteger(MyContract.Activity.ACTIVITY_ID));
+            activity.setDescription(contentValues.getAsString(MyContract.Activity.ACTIVITY_DESCRIPTION));
+            activity.setCountry(contentValues.getAsString(MyContract.Activity.ACTIVITY_COUNTRY));
+            activity.setStartDate(format.parse(contentValues.getAsString(MyContract.Activity.ACTIVITY_START_DATE)));
+            activity.setEndDate(format.parse(contentValues.getAsString(MyContract.Activity.ACTIVITY_END_DATE)));
+            activity.setCost(contentValues.getAsInteger(MyContract.Activity.ACTIVITY_COST));
+            activity.setShortDescription(contentValues.getAsString(MyContract.Activity.ACTIVITY_SHORT_DESCRIPTION));
+            activity.setBusinessId(contentValues.getAsLong(MyContract.Activity.ACTIVITY_BUSINESS_ID));
+
+        }
+        catch (ParseException e)
+        {
+            e.toString();
+        }
 
         return activity;
     }
@@ -107,11 +121,12 @@ public class Tools
                         MyContract.Activity.ACTIVITY_BUSINESS_ID,
                 };
         MatrixCursor matrixCursor = new MatrixCursor(columns);
-
-        for (Activity activity : activities) {
-            matrixCursor.addRow(new Object[]{activity.getId(), activity.getDescription(), activity.getCountry(),
-                activity.getStartDate(), activity.getEndDate(), activity.getCost(), activity.getShortDescription(),
-                activity.getBusinessId() });
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        for (Activity activity : activities)
+        {
+            matrixCursor.addRow(new Object[]{activity.getId(), activity.getDescription().toString().replaceAll("_"," "),
+                    activity.getCountry(), sdf.format(activity.getStartDate()), sdf.format(activity.getEndDate()),
+                    activity.getCost(), activity.getShortDescription(), activity.getBusinessId() });
         }
 
         return matrixCursor;

@@ -11,14 +11,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 import trabelstesh.javaproject.R;
 import trabelstesh.javaproject.model.backend.DBManagerFactory;
 import trabelstesh.javaproject.model.backend.IDB_manager;
 import trabelstesh.javaproject.model.backend.MyContract;
+import trabelstesh.javaproject.model.entities.Activity;
 import trabelstesh.javaproject.model.entities.Business;
-import trabelstesh.javaproject.model.entities.User;
+import trabelstesh.javaproject.model.entities.Description;
 
 public class TroubleActivity extends AppCompatActivity
 {
@@ -28,6 +32,39 @@ public class TroubleActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trouble);
+
+        AddInitialBusinessAndActivity();
+    }
+
+    private void AddInitialBusinessAndActivity() {
+        final IDB_manager dbm = DBManagerFactory.getManager();
+
+        Business business = new Business(
+                123 ,"Stesh", "Yigal street, Jerusalem, IL",
+                "5868349", "ymsil719@gmail.com", "www.google.com");
+        ContentValues businessCV = new ContentValues();
+        businessCV.put(MyContract.Business.BUSINESS_ID, business.getId());
+        businessCV.put(MyContract.Business.BUSINESS_NAME, business.getName());
+        businessCV.put(MyContract.Business.BUSINESS_ADDRESS, business.getAddress());
+        businessCV.put(MyContract.Business.BUSINESS_PHONE, business.getPhone());
+        businessCV.put(MyContract.Business.BUSINESS_EMAIL, business.getEmail());
+        businessCV.put(MyContract.Business.BUSINESS_WEBSITE, business.getWebsite());
+        dbm.AddBusiness(businessCV);
+
+
+        Activity activity = new Activity(
+                GenerateNewID(dbm.GetAllActivities()), Description.Entertainment_Shows, "IL",
+                new Date(), new Date(), 2000, "Avraham Fried Concert", 123);
+        ContentValues activityCV = new ContentValues();
+        activityCV.put(MyContract.Activity.ACTIVITY_ID, activity.getId());
+        activityCV.put(MyContract.Activity.ACTIVITY_DESCRIPTION, activity.getDescription().toString());
+        activityCV.put(MyContract.Activity.ACTIVITY_COUNTRY, activity.getCountry());
+        activityCV.put(MyContract.Activity.ACTIVITY_START_DATE, new SimpleDateFormat("dd/MM/yyyy").format(activity.getStartDate()));
+        activityCV.put(MyContract.Activity.ACTIVITY_END_DATE, new SimpleDateFormat("dd/MM/yyyy").format(activity.getEndDate()));
+        activityCV.put(MyContract.Activity.ACTIVITY_COST, activity.getCost());
+        activityCV.put(MyContract.Activity.ACTIVITY_SHORT_DESCRIPTION, activity.getShortDescription());
+        activityCV.put(MyContract.Activity.ACTIVITY_BUSINESS_ID, activity.getBusinessId());
+        dbm.AddActivity(activityCV);
     }
 
     public void AddBusiness(View view)
@@ -103,24 +140,23 @@ public class TroubleActivity extends AppCompatActivity
 
     public void AllActivities(View view)
     {
-        //need to find and fix bug first....
-//        Intent regintent = new Intent(this, AllActivitiesActivity.class);
-//        startActivity((regintent));
+        Intent regintent = new Intent(this, AllActivitiesActivity.class);
+        startActivity((regintent));
     }
 
-    private long GenerateNewID(Cursor businesses)
+    private long GenerateNewID(Cursor cursor)
     {
         Random random = new Random();
         long newID = 0;
         boolean isNew = false;
-        int idColumnIndex = businesses.getColumnIndex(MyContract.Business.BUSINESS_ID);
+        //int idColumnIndex = cursor.getColumnIndex(MyContract.Business.BUSINESS_ID);
 
         while (!isNew)
         {
             newID = random.nextInt(1000)+1;
             isNew = true;
-            while (businesses.moveToNext())
-                if (businesses.getLong(idColumnIndex) == newID) isNew = false;
+            while (cursor.moveToNext())
+                if (cursor.getLong(0) == newID) isNew = false;
             if (isNew) return newID;
         }
         return newID;

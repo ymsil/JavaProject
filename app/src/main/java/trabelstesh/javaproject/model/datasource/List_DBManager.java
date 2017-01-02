@@ -45,7 +45,8 @@ public class List_DBManager implements IDB_manager
     }
 
     @Override
-    public long AddActivity(ContentValues values) {
+    public long AddActivity(ContentValues values)
+    {
         trabelstesh.javaproject.model.entities.Activity activity = Tools.ContentValuesToActivity(values);
         activities.add(activity);
         changed = true;

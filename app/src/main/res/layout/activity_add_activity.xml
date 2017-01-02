@@ -55,7 +55,7 @@
                 android:hint="enter country"/>
 
             <TextView
-                android:text="Start date:"
+                android:text="Start date: (touch to change)"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
@@ -71,7 +71,7 @@
                 android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
             <TextView
-                android:text="End date:"
+                android:text="End date: (touch to change)"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
