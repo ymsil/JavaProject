@@ -67,13 +67,13 @@ public class AddActivityActivity extends AppCompatActivity {
 //        });
 
         final IDB_manager dbm = DBManagerFactory.getManager();
-        Cursor businesses = dbm.GetAllBusinesses();
-        int businessNameColumnIndex = businesses.getColumnIndex(MyContract.Business.BUSINESS_NAME);
+        Cursor allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI, new String[]{},"",new String[]{},"");
+        int businessNameColumnIndex = allBusinesses.getColumnIndex(MyContract.Business.BUSINESS_NAME);
         int i = 0;
-        String [] businessNames = new String[businesses.getCount()];
-        while (businesses.moveToNext())
+        String [] businessNames = new String[allBusinesses.getCount()];
+        while (allBusinesses.moveToNext())
         {
-            businessNames[i++] = businesses.getString(businessNameColumnIndex);
+            businessNames[i++] = allBusinesses.getString(businessNameColumnIndex);
         }
         Spinner BusinessSpinner = (Spinner) findViewById(R.id.businessSpinner);
         BusinessSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, businessNames));
@@ -121,20 +121,20 @@ public class AddActivityActivity extends AppCompatActivity {
         String description = descriptionSpinner.getSelectedItem().toString().replaceAll(" ", "_");
         EditText countryText = (EditText)view.findViewById(R.id.countryText);
         TextView startDateText = (TextView)view.findViewById(R.id.startDateText);
-//        Calendar startDate = FromStringToCalendar(startDateText.getText().toString());
         String startDate = startDateText.getText().toString();
         TextView endDateText = (TextView) view.findViewById(R.id.endDateText);
-//        Calendar endDate = FromStringToCalendar(endDateText.getText().toString());
         String endDate = endDateText.getText().toString();
         EditText costText = (EditText)view.findViewById(R.id.CostText);
         EditText shortDescText = (EditText)view.findViewById(R.id.shortDescText);
         Spinner bIdSpinner = (Spinner)view.findViewById(R.id.businessSpinner);
         String bName = bIdSpinner.getSelectedItem().toString();
-        Long bId = FindIdByName(bName, dbm.GetAllBusinesses());
+        Cursor allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI, new String[]{},"",new String[]{},"");
+        Long bId = FindIdByName(bName, allBusinesses);
         if (bId < 0) throw new Exception("Problem with business ID");
 
         Activity newActivity = new Activity();
-        long aId = GenerateNewID(dbm.GetAllActivities());
+        Cursor allActivities = getContentResolver().query(MyContract.Activity.ACTIVITY_URI, new String[]{},"",new String[]{},"");
+        long aId = GenerateNewID(allActivities);
         newActivity.setId(aId);
         newActivity.setDescription(description);
         newActivity.setCountry(countryText.getText().toString());
@@ -153,7 +153,8 @@ public class AddActivityActivity extends AppCompatActivity {
         cv.put(MyContract.Activity.ACTIVITY_COST, newActivity.getCost());
         cv.put(MyContract.Activity.ACTIVITY_SHORT_DESCRIPTION, newActivity.getShortDescription());
         cv.put(MyContract.Activity.ACTIVITY_BUSINESS_ID, newActivity.getBusinessId());
-        dbm.AddActivity(cv);
+        //dbm.AddActivity(cv);
+        getContentResolver().insert(MyContract.Business.BUSINESS_URI, cv);
 
         Toast.makeText(getApplicationContext(), "activity added", Toast.LENGTH_SHORT).show();
     }
@@ -166,21 +167,6 @@ public class AddActivityActivity extends AppCompatActivity {
             if (businesses.getString(bNameColumnIndex) == bName)
                 return businesses.getLong(bIdColumnIndex);
         return (long)-1;
-    }
-
-    private Calendar FromStringToCalendar(String stringDate)
-    {
-        DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
-        Calendar cal  = Calendar.getInstance();
-        try
-        {
-            cal.setTime(df.parse(stringDate));
-        }
-        catch (ParseException e)
-        {
-            e.printStackTrace();
-        }
-        return cal;
     }
 
     private long GenerateNewID(Cursor activities)

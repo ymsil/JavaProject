@@ -12,6 +12,7 @@ import android.widget.ListView;
 import trabelstesh.javaproject.R;
 import trabelstesh.javaproject.model.backend.DBManagerFactory;
 import trabelstesh.javaproject.model.backend.IDB_manager;
+import trabelstesh.javaproject.model.backend.MyContract;
 
 public class AllActivitiesActivity extends AppCompatActivity {
 
@@ -20,8 +21,8 @@ public class AllActivitiesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_activities);
 
-        final IDB_manager dbm = DBManagerFactory.getManager();
-        PopulateListView(dbm.GetAllActivities());
+        Cursor allActivities = getContentResolver().query(MyContract.Activity.ACTIVITY_URI, new String[]{},"",new String[]{},"");
+        PopulateListView(allActivities);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -46,11 +46,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_login"
             android:theme="@style/FullscreenTheme" />
-        <activity
-            android:name=".controller.MenuActivity"
-            android:label="@string/title_activity_menu"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".controller.TroubleActivity" />
+        <activity android:name=".controller.MenuActivity" />
         <activity android:name=".controller.AddActivityActivity" />
         <activity
             android:name=".controller.AllBusinessesActivity"

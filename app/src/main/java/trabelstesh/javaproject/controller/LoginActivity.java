@@ -7,8 +7,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,7 +22,6 @@ import trabelstesh.javaproject.R;
 import trabelstesh.javaproject.model.backend.DBManagerFactory;
 import trabelstesh.javaproject.model.backend.IDB_manager;
 import trabelstesh.javaproject.model.backend.MyContract;
-import trabelstesh.javaproject.model.datasource.Tools;
 import trabelstesh.javaproject.model.entities.User;
 
 /**
@@ -197,18 +194,17 @@ public class LoginActivity extends AppCompatActivity
         user.setName(name);
         user.setPassword(password);
 
-        IDB_manager dbm = DBManagerFactory.getManager();
-        Cursor users = dbm.GetAllUsers();
-        while (users.moveToNext())
+        //IDB_manager dbm = DBManagerFactory.getManager();
+        Cursor allUsers = getContentResolver().query(MyContract.User.USER_URI, new String[]{},"",new String[]{},"");
+        while (allUsers.moveToNext())
         {
-            if (((User) users).getName() == name)
-                if (((User) users).getPassword() == password)
+            if (((User) allUsers).getName() == name)
+                if (((User) allUsers).getPassword() == password)
                 {
                     Toast.makeText(getApplicationContext(), "login successful",
                             Toast.LENGTH_SHORT).show();
                     if (isChecked) SaveToSharedPreferences(user);
-                    //Intent regintent = new Intent(this, MenuActivity.class);
-                    Intent regintent = new Intent(this, TroubleActivity.class);
+                    Intent regintent = new Intent(this, MenuActivity.class);
                     startActivity((regintent));
                 }
                 else
@@ -217,21 +213,21 @@ public class LoginActivity extends AppCompatActivity
                             Toast.LENGTH_SHORT).show();
                 }
         }
-        long randomID = GenerateNewID(users);
+        long randomID = GenerateNewID(allUsers);
         user.setId(randomID);
         ContentValues cv = new ContentValues();
         cv.put(MyContract.User.USER_ID, user.getId());
         cv.put(MyContract.User.USER_NAME, user.getName());
         cv.put(MyContract.User.USER_PASSWORD, user.getPassword());
-        dbm.AddUser(cv);
+        getContentResolver().insert(MyContract.User.USER_URI, cv);
 
         Toast.makeText(getApplicationContext(), "Welcome " + user.getName() + ". new user registered",
                 Toast.LENGTH_SHORT).show();
-//        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coo)
+
 //        Snackbar snackbar = Snackbar.make(coordinatorLayout, "Welcome " + user.getName() + ". new user registered", Snackbar.LENGTH_LONG).show();
         if (isChecked) SaveToSharedPreferences(user);
-        //Intent regintent = new Intent(this, MenuActivity.class);
-        Intent regintent = new Intent(this, TroubleActivity.class);
+
+        Intent regintent = new Intent(this, MenuActivity.class);
         startActivity((regintent));
     }
 
