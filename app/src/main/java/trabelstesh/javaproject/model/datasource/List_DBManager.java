@@ -155,7 +155,8 @@ public class List_DBManager implements IDB_manager
     }
 
     @Override
-    public Cursor GetAllActivities() {
+    public Cursor GetAllActivities()
+    {
         return Tools.ActivityListToCursor(activities);
     }
 
