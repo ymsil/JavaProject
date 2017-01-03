@@ -68,7 +68,8 @@
                         android:hint="@string/Name"
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -86,7 +87,8 @@
                         android:imeOptions="actionUnspecified"
                         android:inputType="textPassword"
                         android:maxLines="1"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large.Inverse" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -97,10 +99,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/action_sign_in"
-                    android:textStyle="bold"
                     android:background="@color/colorPrimary"
                     android:onClick="SignRegisterClick"
-                    />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Inverse" />
 
                 <CheckBox
                     android:text="Remember me?"
@@ -110,7 +111,8 @@
                     android:layout_weight="1"
                     android:textAllCaps="false"
                     android:checked="true"
-                    android:onClick="Unchecked"/>
+                    android:onClick="Unchecked"
+                    />
 
             </LinearLayout>
         </ScrollView>

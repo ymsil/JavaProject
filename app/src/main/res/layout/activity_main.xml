@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -11,20 +12,35 @@
     tools:context="trabelstesh.javaproject.controller.MainActivity">
 
     <Button
-        android:text="Press here"
+        android:text="Enter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/welcome"
         android:layout_centerVertical="true"
         android:onClick="EnterClick"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:elevation="0dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     <TextView
-        android:text="WELCOME"
-        android:layout_centerHorizontal="true"
+        android:text="WELCOME\nto\nTrouble Ways!"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/WelcomeText"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        android:textStyle="normal|bold"
+        android:textAlignment="center"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/enter_pic"
+        android:layout_below="@+id/welcome"
+        android:layout_toStartOf="@+id/welcome"
+        android:id="@+id/imageView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
