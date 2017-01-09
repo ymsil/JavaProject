@@ -83,19 +83,20 @@ public class MyContentProvider extends ContentProvider {
         Log.d(TAG, "delete " + uri.toString());
 
         String listName = uri.getLastPathSegment();
-        long id = ContentUris.parseId(uri);
+        //long id = ContentUris.parseId(uri);
+        long id = Long.parseLong(strings[0]);
         switch (listName)
         {
             case "users":
-                if (manager.DeleteUser((int) id))
+                if (manager.DeleteUser(id))
                     return 1;
                 break;
             case "businesses":
-                if (manager.DeleteBusiness((int) id))
+                if (manager.DeleteBusiness(id))
                     return 1;
                 break;
             case "activities":
-                if (manager.DeleteActivity((int) id))
+                if (manager.DeleteActivity(id))
                     return 1;
                 break;
         }

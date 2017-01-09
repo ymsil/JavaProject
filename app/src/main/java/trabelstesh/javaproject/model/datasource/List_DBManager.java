@@ -53,7 +53,7 @@ public class List_DBManager implements IDB_manager
         return activity.getId();
     }
 
-    public boolean UpdateUser(int id, ContentValues contentValues)
+    public boolean UpdateUser(long id, ContentValues contentValues)
     {
         User user = Tools.ContentValuesToUser(contentValues);
         for (int i = 0; i < users.size(); i++)
@@ -67,7 +67,7 @@ public class List_DBManager implements IDB_manager
     }
 
     @Override
-    public boolean UpdateBusiness(int id, ContentValues contentValues)
+    public boolean UpdateBusiness(long id, ContentValues contentValues)
     {
         Business business = Tools.ContentValuesToBusiness(contentValues);
         for (int i = 0; i < businesses.size(); i++)
@@ -85,7 +85,7 @@ public class List_DBManager implements IDB_manager
     }
 
     @Override
-    public boolean UpdateActivity(int id, ContentValues contentValues)
+    public boolean UpdateActivity(long id, ContentValues contentValues)
     {
         Activity activity = Tools.ContentValuesToActivity(contentValues);
         for (int i = 0; i < activities.size(); i++)
@@ -105,7 +105,7 @@ public class List_DBManager implements IDB_manager
     }
 
     @Override
-    public boolean DeleteUser(int id)
+    public boolean DeleteUser(long id)
     {
         User userToDelete = null;
         for (User user : users)
@@ -117,7 +117,7 @@ public class List_DBManager implements IDB_manager
     }
 
     @Override
-    public boolean DeleteBusiness(int id)
+    public boolean DeleteBusiness(long id)
     {
         Business businessToDelete = null;
         for (Business business : businesses)
@@ -130,7 +130,7 @@ public class List_DBManager implements IDB_manager
     }
 
     @Override
-    public boolean DeleteActivity(int id)
+    public boolean DeleteActivity(long id)
     {
         Activity activityToDelete = null;
         for (Activity activity : activities)

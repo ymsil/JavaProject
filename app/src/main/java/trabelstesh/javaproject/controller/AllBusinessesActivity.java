@@ -41,12 +41,13 @@ public class AllBusinessesActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton addActionButton = (FloatingActionButton) findViewById(R.id.addActionButton);
-        addActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                Snackbar.make(view, "Add a new business?? ", Snackbar.LENGTH_LONG)
-                        .setAction("Add", new View.OnClickListener()
-                        {
+        addActionButton.setOnClickListener(new View.OnClickListener()
+        {
+//            @Override
+//            public void onClick(final View view) {
+//                Snackbar.make(view, "Add a new business?? ", Snackbar.LENGTH_LONG)
+//                        .setAction("Add", new View.OnClickListener()
+//                        {
                             @Override
                             public void onClick(View v)
                             {
@@ -107,8 +108,8 @@ public class AllBusinessesActivity extends AppCompatActivity
                                     }
                                 });
                             }
-                        }).show();
-            }
+//                        }).show();
+//            }
         });
     }
 
@@ -178,7 +179,11 @@ public class AllBusinessesActivity extends AppCompatActivity
                         cv.put(MyContract.Business.BUSINESS_PHONE, updatedBusiness.getPhone());
                         cv.put(MyContract.Business.BUSINESS_EMAIL, updatedBusiness.getEmail());
                         cv.put(MyContract.Business.BUSINESS_WEBSITE, updatedBusiness.getWebsite());
-                        getContentResolver().update(MyContract.Business.BUSINESS_URI, cv, null, null);
+//                        getContentResolver().update(MyContract.Business.BUSINESS_URI, cv,
+//                                MyContract.Business.BUSINESS_ID + " = ?", new String[]{String.valueOf(updatedBusiness.getId())});-
+                        allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI,
+                                new String[]{},"",new String[]{},"");
+                        PopulateListView(allBusinesses);
 
                         Toast.makeText(getApplicationContext(), updatedBusiness.getName() + " Business updated", Toast.LENGTH_SHORT).show();
                         dialog.cancel();
@@ -197,7 +202,14 @@ public class AllBusinessesActivity extends AppCompatActivity
                                             public void onClick(View v)
                                             {
                                                 long bId = listViewRow.getLong(listViewRow.getColumnIndex(MyContract.Business.BUSINESS_ID));
-                                                getContentResolver().delete(MyContract.Business.BUSINESS_URI, "_id=?", new String[]{String.valueOf(bId)});
+                                                String id = String.valueOf(bId);
+                                                getContentResolver().delete(
+                                                        MyContract.Business.BUSINESS_URI,
+                                                        "_ID=?",
+                                                        new String[]{id});
+                                                Cursor allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI,
+                                                        new String[]{},"",new String[]{},"");
+                                                PopulateListView(allBusinesses);
                                                 dialog.cancel();
                                             }
                                         }).show();

@@ -45,28 +45,6 @@ public class AddActivityActivity extends AppCompatActivity {
         String today = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
         startDateText.setText(today);
         endDateText.setText(today);
-//        Description description = null;
-//
-//        ActivitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-//        {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-//            {
-//                String descString = parent.getItemAtPosition(position).toString();
-//                for (Description desc : Description.values())
-//                {
-//                    if (desc.toString() == descString) description = desc;
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-
-        final IDB_manager dbm = DBManagerFactory.getManager();
         Cursor allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI, new String[]{},"",new String[]{},"");
         int businessNameColumnIndex = allBusinesses.getColumnIndex(MyContract.Business.BUSINESS_NAME);
         int i = 0;
@@ -115,11 +93,10 @@ public class AddActivityActivity extends AppCompatActivity {
 
     public void AddActivity(View view) throws Exception
     {
-        IDB_manager dbm = DBManagerFactory.getManager();
-
         Spinner descriptionSpinner =(Spinner) findViewById(R.id.descriptionSpinner);
         String description = descriptionSpinner.getSelectedItem().toString().replaceAll(" ", "_");
         EditText countryText = (EditText)view.findViewById(R.id.countryText);
+
         TextView startDateText = (TextView)view.findViewById(R.id.startDateText);
         String startDate = startDateText.getText().toString();
         TextView endDateText = (TextView) view.findViewById(R.id.endDateText);
@@ -155,8 +132,8 @@ public class AddActivityActivity extends AppCompatActivity {
         cv.put(MyContract.Activity.ACTIVITY_BUSINESS_ID, newActivity.getBusinessId());
         //dbm.AddActivity(cv);
         getContentResolver().insert(MyContract.Business.BUSINESS_URI, cv);
-
         Toast.makeText(getApplicationContext(), "activity added", Toast.LENGTH_SHORT).show();
+        this.finish();
     }
 
     private Long FindIdByName(String bName, Cursor businesses)

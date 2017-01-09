@@ -18,12 +18,12 @@ public interface IDB_manager
     long AddUser(ContentValues values);
     long AddBusiness(ContentValues values);
     long AddActivity(ContentValues values);
-    boolean UpdateUser(int id, ContentValues contentValues);
-    boolean UpdateBusiness(int id, ContentValues contentValues);
-    boolean UpdateActivity(int id, ContentValues contentValues);
-    boolean DeleteUser(int id);
-    boolean DeleteBusiness(int id);
-    boolean DeleteActivity(int id);
+    boolean UpdateUser(long id, ContentValues contentValues);
+    boolean UpdateBusiness(long id, ContentValues contentValues);
+    boolean UpdateActivity(long id, ContentValues contentValues);
+    boolean DeleteUser(long id);
+    boolean DeleteBusiness(long id);
+    boolean DeleteActivity(long id);
     Cursor GetAllUsers();
     Cursor GetAllBusinesses();
     Cursor GetAllActivities();
