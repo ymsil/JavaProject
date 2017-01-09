@@ -4,6 +4,9 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -33,6 +36,25 @@ public class MenuActivity extends AppCompatActivity
         setContentView(R.layout.activity_menu);
 
         AddInitialBusinessAndActivity();
+    }
+
+    @Override
+    public void finish()
+    {
+        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) this.findViewById(R.id.coordinatorLayout);
+        Snackbar end = Snackbar.make(coordinatorLayout,
+                "Are you sure you want to exit?", Snackbar.LENGTH_INDEFINITE)
+                .setAction("close", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+                        {
+                            finishAffinity();
+                        }
+                    }
+                });
+        end.show();
+
     }
 
     private void AddInitialBusinessAndActivity() {
@@ -66,69 +88,69 @@ public class MenuActivity extends AppCompatActivity
         getContentResolver().insert(MyContract.Activity.ACTIVITY_URI, activityCV);
     }
 
-    public void AddBusiness(View view)
-    {
-        final Dialog dialog = new Dialog(this);
-        dialog.setTitle("New Business Dialog");
-        dialog.setContentView(R.layout.addbusiness_dialog);
-        dialog.show();
+//    public void AddBusiness(View view)
+//    {
+//        final Dialog dialog = new Dialog(this);
+//        dialog.setTitle("New Business Dialog");
+//        dialog.setContentView(R.layout.addbusiness_dialog);
+//        dialog.show();
+//
+//        Button addBusinessButton = (Button)dialog.findViewById(R.id.AddNewBusinessButton);
+//        Button noNewBusinessButton = (Button)dialog.findViewById(R.id.noNewBusinessButton);
+//
+//        addBusinessButton.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View v)
+//            {
+//
+//                EditText nameText = (EditText)dialog.findViewById(R.id.businessNameText);
+//                EditText addressText = (EditText)dialog.findViewById(R.id.addressText);
+//                EditText phoneText = (EditText)dialog.findViewById(R.id.PhoneText);
+//                EditText emailText = (EditText)dialog.findViewById(R.id.emailText);
+//                EditText websiteText = (EditText)dialog.findViewById(R.id.webText);
+//
+//                Business newBusiness = new Business();
+//                Cursor allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI, new String[]{},"",new String[]{},"");
+//                long bId = GenerateNewID(allBusinesses);
+//                newBusiness.setId(bId);
+//                newBusiness.setName(nameText.getText().toString());
+//                newBusiness.setAddress(addressText.getText().toString());
+//                newBusiness.setPhone(phoneText.getText().toString());
+//                newBusiness.setEmail(emailText.getText().toString());
+//                newBusiness.setWebsite(websiteText.getText().toString());
+//
+//                ContentValues cv = new ContentValues();
+//                cv.put(MyContract.Business.BUSINESS_ID, newBusiness.getId());
+//                cv.put(MyContract.Business.BUSINESS_NAME, newBusiness.getName());
+//                cv.put(MyContract.Business.BUSINESS_ADDRESS, newBusiness.getAddress());
+//                cv.put(MyContract.Business.BUSINESS_PHONE, newBusiness.getPhone());
+//                cv.put(MyContract.Business.BUSINESS_EMAIL, newBusiness.getEmail());
+//                cv.put(MyContract.Business.BUSINESS_WEBSITE, newBusiness.getWebsite());
+//                getContentResolver().insert(MyContract.Business.BUSINESS_URI, cv);
+//
+//                Toast.makeText(getApplicationContext(), newBusiness.getName() + " Business added", Toast.LENGTH_SHORT).show();
+//                dialog.cancel();
+//            }
+//        });
+//
+//        noNewBusinessButton.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View v)
+//            {
+//                Toast.makeText(getApplicationContext(),"didn't add any business", Toast.LENGTH_SHORT).show();
+//                dialog.cancel();
+//            }
+//        });
+//
+//    }
 
-        Button addBusinessButton = (Button)dialog.findViewById(R.id.AddNewBusinessButton);
-        Button noNewBusinessButton = (Button)dialog.findViewById(R.id.noNewBusinessButton);
-
-        addBusinessButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-
-                EditText nameText = (EditText)dialog.findViewById(R.id.businessNameText);
-                EditText addressText = (EditText)dialog.findViewById(R.id.addressText);
-                EditText phoneText = (EditText)dialog.findViewById(R.id.PhoneText);
-                EditText emailText = (EditText)dialog.findViewById(R.id.emailText);
-                EditText websiteText = (EditText)dialog.findViewById(R.id.webText);
-
-                Business newBusiness = new Business();
-                Cursor allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI, new String[]{},"",new String[]{},"");
-                long bId = GenerateNewID(allBusinesses);
-                newBusiness.setId(bId);
-                newBusiness.setName(nameText.getText().toString());
-                newBusiness.setAddress(addressText.getText().toString());
-                newBusiness.setPhone(phoneText.getText().toString());
-                newBusiness.setEmail(emailText.getText().toString());
-                newBusiness.setWebsite(websiteText.getText().toString());
-
-                ContentValues cv = new ContentValues();
-                cv.put(MyContract.Business.BUSINESS_ID, newBusiness.getId());
-                cv.put(MyContract.Business.BUSINESS_NAME, newBusiness.getName());
-                cv.put(MyContract.Business.BUSINESS_ADDRESS, newBusiness.getAddress());
-                cv.put(MyContract.Business.BUSINESS_PHONE, newBusiness.getPhone());
-                cv.put(MyContract.Business.BUSINESS_EMAIL, newBusiness.getEmail());
-                cv.put(MyContract.Business.BUSINESS_WEBSITE, newBusiness.getWebsite());
-                getContentResolver().insert(MyContract.Business.BUSINESS_URI, cv);
-
-                Toast.makeText(getApplicationContext(), newBusiness.getName() + " Business added", Toast.LENGTH_SHORT).show();
-                dialog.cancel();
-            }
-        });
-
-        noNewBusinessButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Toast.makeText(getApplicationContext(),"didn't add any business", Toast.LENGTH_SHORT).show();
-                dialog.cancel();
-            }
-        });
-
-    }
-
-    public void AddActivity(View view)
-    {
-        Intent regintent = new Intent(this, AddActivityActivity.class);
-        startActivity((regintent));
-    }
+//    public void AddActivity(View view)
+//    {
+//        Intent regintent = new Intent(this, AddActivityActivity.class);
+//        startActivity((regintent));
+//    }
 
     public void AllBusinesses(View view)
     {
@@ -142,22 +164,22 @@ public class MenuActivity extends AppCompatActivity
         startActivity((regintent));
     }
 
-    private long GenerateNewID(Cursor cursor)
-    {
-        Random random = new Random();
-        long newID = 0;
-        boolean isNew = false;
-        //int idColumnIndex = cursor.getColumnIndex(MyContract.Business.BUSINESS_ID);
-
-        while (!isNew)
-        {
-            newID = random.nextInt(1000)+1;
-            isNew = true;
-            while (cursor.moveToNext())
-                if (cursor.getLong(0) == newID) isNew = false;
-            if (isNew) return newID;
-        }
-        return newID;
-    }
+//    private long GenerateNewID(Cursor cursor)
+//    {
+//        Random random = new Random();
+//        long newID = 0;
+//        boolean isNew = false;
+//        //int idColumnIndex = cursor.getColumnIndex(MyContract.Business.BUSINESS_ID);
+//
+//        while (!isNew)
+//        {
+//            newID = random.nextInt(1000)+1;
+//            isNew = true;
+//            while (cursor.moveToNext())
+//                if (cursor.getLong(0) == newID) isNew = false;
+//            if (isNew) return newID;
+//        }
+//        return newID;
+//    }
 
 }
