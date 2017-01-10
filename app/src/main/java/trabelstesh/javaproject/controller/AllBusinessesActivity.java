@@ -2,7 +2,6 @@ package trabelstesh.javaproject.controller;
 
 import android.app.Dialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,8 +18,6 @@ import android.widget.Toast;
 import java.util.Random;
 
 import trabelstesh.javaproject.R;
-import trabelstesh.javaproject.model.backend.DBManagerFactory;
-import trabelstesh.javaproject.model.backend.IDB_manager;
 import trabelstesh.javaproject.model.backend.MyContract;
 import trabelstesh.javaproject.model.entities.Business;
 
@@ -131,7 +128,7 @@ public class AllBusinessesActivity extends AppCompatActivity
                 final Cursor listViewRow = (Cursor) parent.getItemAtPosition(position);
                 dialog.setContentView(R.layout.addbusiness_dialog);
                 dialog.show();
-                long bId = listViewRow.getLong(listViewRow.getColumnIndex(MyContract.Business.BUSINESS_ID));
+                //long bId = listViewRow.getLong(listViewRow.getColumnIndex(MyContract.Business.BUSINESS_ID));
                 EditText nameText = (EditText)dialog.findViewById(R.id.businessNameText);
                 nameText.setText(listViewRow.getString(listViewRow.getColumnIndex(MyContract.Business.BUSINESS_NAME)));
                 EditText addressText = (EditText)dialog.findViewById(R.id.addressText);
@@ -161,9 +158,6 @@ public class AllBusinessesActivity extends AppCompatActivity
                         EditText websiteText = (EditText)dialog.findViewById(R.id.webText);
 
                         Business updatedBusiness = new Business();
-
-                        Cursor allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI,
-                                new String[]{},"",new String[]{},"");
                         long bId = listViewRow.getLong(listViewRow.getColumnIndex(MyContract.Business.BUSINESS_ID));
                         updatedBusiness.setId(bId);
                         updatedBusiness.setName(nameText.getText().toString());
@@ -179,9 +173,11 @@ public class AllBusinessesActivity extends AppCompatActivity
                         cv.put(MyContract.Business.BUSINESS_PHONE, updatedBusiness.getPhone());
                         cv.put(MyContract.Business.BUSINESS_EMAIL, updatedBusiness.getEmail());
                         cv.put(MyContract.Business.BUSINESS_WEBSITE, updatedBusiness.getWebsite());
-//                        getContentResolver().update(MyContract.Business.BUSINESS_URI, cv,
-//                                MyContract.Business.BUSINESS_ID + " = ?", new String[]{String.valueOf(updatedBusiness.getId())});-
-                        allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI,
+                        getContentResolver().update(
+                                MyContract.Business.BUSINESS_URI,
+                                cv,
+                                "_id = ?", new String[]{String.valueOf(bId)});
+                        Cursor allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI,
                                 new String[]{},"",new String[]{},"");
                         PopulateListView(allBusinesses);
 
@@ -196,24 +192,15 @@ public class AllBusinessesActivity extends AppCompatActivity
                     @Override
                     public void onClick(View v)
                     {
-                        Snackbar.make(v, "Are you sure you want to delete?" , Snackbar.LENGTH_LONG)
-                                .setAction("delete", new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v)
-                                            {
-                                                long bId = listViewRow.getLong(listViewRow.getColumnIndex(MyContract.Business.BUSINESS_ID));
-                                                String id = String.valueOf(bId);
-                                                getContentResolver().delete(
-                                                        MyContract.Business.BUSINESS_URI,
-                                                        "_ID=?",
-                                                        new String[]{id});
-                                                Cursor allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI,
-                                                        new String[]{},"",new String[]{},"");
-                                                PopulateListView(allBusinesses);
-                                                dialog.cancel();
-                                            }
-                                        }).show();
-                        dialog.cancel();
+                        long bId = listViewRow.getLong(listViewRow.getColumnIndex(MyContract.Business.BUSINESS_ID));
+                        String id = String.valueOf(bId);
+                        getContentResolver().delete(
+                                MyContract.Business.BUSINESS_URI,
+                                "_id = ?",
+                                new String[]{id});
+                        Cursor allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI,
+                                new String[]{},"",new String[]{},"");
+                        PopulateListView(allBusinesses);
                     }
                 });
                 return false;
@@ -222,20 +209,19 @@ public class AllBusinessesActivity extends AppCompatActivity
         });
     }
 
-    public void UpdateListView()
-    {
-        // Switch to new cursor and update contents of ListView
-        Cursor allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI,
-                new String[]{},"",new String[]{},"");
-        //BusinessCursorAdapter.changeCursor(allBusinesses);
-    }
+//    public void UpdateListView()
+//    {
+//        // Switch to new cursor and update contents of ListView
+//        Cursor allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI,
+//                new String[]{},"",new String[]{},"");
+//        //BusinessCursorAdapter.changeCursor(allBusinesses);
+//    }
 
     private long GenerateNewID(Cursor cursor)
     {
         Random random = new Random();
         long newID = 0;
         boolean isNew = false;
-        //int idColumnIndex = cursor.getColumnIndex(MyContract.Business.BUSINESS_ID);
 
         while (!isNew)
         {

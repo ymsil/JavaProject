@@ -109,19 +109,20 @@ public class MyContentProvider extends ContentProvider {
         Log.d(TAG, "update " + uri.toString());
 
         String listName = uri.getLastPathSegment();
-        long id = ContentUris.parseId(uri);
-        int indexToUpdate = -1;
-        switch (listName) {
+//        long id = ContentUris.parseId(uri);
+        long id = Long.parseLong(strings[0]);
+        switch (listName)
+        {
             case "users":
-                if (manager.UpdateUser((int) id, contentValues))
+                if (manager.UpdateUser(id, contentValues))
                     return 1;
                 break;
             case "businesses":
-                if (manager.UpdateBusiness((int) id, contentValues))
+                if (manager.UpdateBusiness(id, contentValues))
                     return 1;
                 break;
             case "activities":
-                if (manager.UpdateActivity((int) id, contentValues))
+                if (manager.UpdateActivity(id, contentValues))
                     return 1;
                 break;
         }
