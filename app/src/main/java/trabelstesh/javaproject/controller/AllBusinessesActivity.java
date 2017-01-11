@@ -201,6 +201,7 @@ public class AllBusinessesActivity extends AppCompatActivity
                         Cursor allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI,
                                 new String[]{},"",new String[]{},"");
                         PopulateListView(allBusinesses);
+                        dialog.cancel();
                     }
                 });
                 return false;

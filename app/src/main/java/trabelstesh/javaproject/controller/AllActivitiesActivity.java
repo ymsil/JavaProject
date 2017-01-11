@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import trabelstesh.javaproject.R;
@@ -16,6 +17,14 @@ import trabelstesh.javaproject.model.backend.IDB_manager;
 import trabelstesh.javaproject.model.backend.MyContract;
 
 public class AllActivitiesActivity extends AppCompatActivity {
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Cursor allActivities = getContentResolver().query(MyContract.Activity.ACTIVITY_URI, new String[]{},"",new String[]{},"");
+        PopulateListView(allActivities);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +44,6 @@ public class AllActivitiesActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
                 startActivity((regintent));
             }
         });
@@ -50,5 +57,13 @@ public class AllActivitiesActivity extends AppCompatActivity {
         ActivityCursorAdapter activityCursorAdapter = new ActivityCursorAdapter(this, activities);
         // Attach cursor adapter to the ListView
         lvItems.setAdapter(activityCursorAdapter);
+
+        // TODO: 1/11/2017 implement on click listener for updating and deleting activity
+//        lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                return false;
+//            }
+//        })
     }
 }

@@ -49,9 +49,9 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPostalAddress"
+                android:inputType="text"
                 android:ems="10"
-                android:id="@+id/countryText"
+                android:id="@+id/countryEditText"
                 android:hint="enter country"/>
 
             <TextView

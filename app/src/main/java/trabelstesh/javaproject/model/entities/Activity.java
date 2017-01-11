@@ -1,8 +1,5 @@
 package trabelstesh.javaproject.model.entities;
 
-import android.widget.Switch;
-
-import java.util.Calendar;
 import java.util.Date;
 
 public class Activity
@@ -25,10 +22,9 @@ public class Activity
     public Description getDescription() {
         return description;
     }
-    public void setDescription(String description)
-    {
+    public void setDescription(String description) {
         for (Description d: Description.values())
-            if (d.toString() == description) this.description = d;
+            if (d.toString().equals(description)) this.description = d;
     }
     public String getCountry() {
         return country;
