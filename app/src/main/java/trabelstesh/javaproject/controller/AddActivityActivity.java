@@ -125,12 +125,9 @@ public class AddActivityActivity extends AppCompatActivity {
         cv.put(MyContract.Activity.ACTIVITY_COST, newActivity.getCost());
         cv.put(MyContract.Activity.ACTIVITY_SHORT_DESCRIPTION, newActivity.getShortDescription());
         cv.put(MyContract.Activity.ACTIVITY_BUSINESS_ID, newActivity.getBusinessId());
-        //dbm.AddActivity(cv);
         getContentResolver().insert(MyContract.Activity.ACTIVITY_URI, cv);
         Toast.makeText(getApplicationContext(), "activity added", Toast.LENGTH_SHORT).show();
 
-//        allActivities = getContentResolver().query(MyContract.Activity.ACTIVITY_URI, new String[]{},"",new String[]{},"");
-//        PopulateListView(allActivities);
         this.finish();
     }
 
@@ -160,16 +157,6 @@ public class AddActivityActivity extends AppCompatActivity {
             if (isNew) return newID;
         }
         return newID;
-    }
-
-    private void PopulateListView(Cursor activities)
-    {
-        // Find ListView to populate
-        ListView lvItems = (ListView) findViewById(R.id.activitiesLV);
-        // Setup cursor adapter using cursor from last step
-        ActivityCursorAdapter activityCursorAdapter = new ActivityCursorAdapter(this, activities);
-        // Attach cursor adapter to the ListView
-        lvItems.setAdapter(activityCursorAdapter);
     }
 
     public void Back(View view)
