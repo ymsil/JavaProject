@@ -94,7 +94,7 @@ public class Tools
                         MyContract.Business.BUSINESS_ADDRESS,
                         MyContract.Business.BUSINESS_PHONE,
                         MyContract.Business.BUSINESS_EMAIL,
-                        MyContract.Business.BUSINESS_WEBSITE,
+                        MyContract.Business.BUSINESS_WEBSITE
                 };
         MatrixCursor matrixCursor = new MatrixCursor(columns);
 
@@ -118,15 +118,22 @@ public class Tools
                         MyContract.Activity.ACTIVITY_END_DATE,
                         MyContract.Activity.ACTIVITY_COST,
                         MyContract.Activity.ACTIVITY_SHORT_DESCRIPTION,
-                        MyContract.Activity.ACTIVITY_BUSINESS_ID,
+                        MyContract.Activity.ACTIVITY_BUSINESS_ID
                 };
         MatrixCursor matrixCursor = new MatrixCursor(columns);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         for (Activity activity : activities)
         {
-            matrixCursor.addRow(new Object[]{activity.getId(), activity.getDescription().toString().replaceAll("_"," "),
-                    activity.getCountry(), sdf.format(activity.getStartDate()), sdf.format(activity.getEndDate()),
-                    activity.getCost(), activity.getShortDescription(), activity.getBusinessId() });
+            matrixCursor.addRow(new Object[]{
+                    activity.getId(),
+                    activity.getDescription().toString().replaceAll("_"," "),
+                    activity.getCountry(),
+                    sdf.format(activity.getStartDate()),
+                    sdf.format(activity.getEndDate()),
+                    activity.getCost(),
+                    activity.getShortDescription(),
+                    activity.getBusinessId()
+            });
         }
 
         return matrixCursor;
