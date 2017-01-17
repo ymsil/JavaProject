@@ -62,50 +62,61 @@ public class AllBusinessesActivity extends AppCompatActivity
                                     public void onClick(View v)
                                     {
 
-                                        EditText nameText = (EditText)dialog.findViewById(R.id.businessNameText);
-                                        EditText addressText = (EditText)dialog.findViewById(R.id.addressText);
-                                        EditText phoneText = (EditText)dialog.findViewById(R.id.PhoneText);
-                                        EditText emailText = (EditText)dialog.findViewById(R.id.emailText);
-                                        EditText websiteText = (EditText)dialog.findViewById(R.id.webText);
+                                        final EditText nameText = (EditText)dialog.findViewById(R.id.businessNameText);
+                                        final EditText addressText = (EditText)dialog.findViewById(R.id.addressText);
+                                        final EditText phoneText = (EditText)dialog.findViewById(R.id.PhoneText);
+                                        final EditText emailText = (EditText)dialog.findViewById(R.id.emailText);
+                                        final EditText websiteText = (EditText)dialog.findViewById(R.id.webText);
 
-                                        final Business newBusiness = new Business();
-                                        Cursor allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI, new String[]{},"",new String[]{},"");
-                                        long bId = GenerateNewID(allBusinesses);
-                                        newBusiness.setId(bId);
-                                        newBusiness.setName(nameText.getText().toString());
-                                        newBusiness.setAddress(addressText.getText().toString());
-                                        newBusiness.setPhone(phoneText.getText().toString());
-                                        newBusiness.setEmail(emailText.getText().toString());
-                                        newBusiness.setWebsite(websiteText.getText().toString());
-
-                                        final ContentValues cv = new ContentValues();
-                                        cv.put(MyContract.Business.BUSINESS_ID, newBusiness.getId());
-                                        cv.put(MyContract.Business.BUSINESS_NAME, newBusiness.getName());
-                                        cv.put(MyContract.Business.BUSINESS_ADDRESS, newBusiness.getAddress());
-                                        cv.put(MyContract.Business.BUSINESS_PHONE, newBusiness.getPhone());
-                                        cv.put(MyContract.Business.BUSINESS_EMAIL, newBusiness.getEmail());
-                                        cv.put(MyContract.Business.BUSINESS_WEBSITE, newBusiness.getWebsite());
-
-                                        new AsyncTask<Void, Void, Uri>() {
+                                        new AsyncTask<Void, Void, Cursor>() {
                                             @Override
-                                            protected Uri doInBackground(Void... params) {
-                                                return getContentResolver().insert(MyContract.Business.BUSINESS_URI, cv);
+                                            protected Cursor doInBackground(Void... params) {
+                                                return getContentResolver().query(MyContract.Business.BUSINESS_URI, new String[]{},"",new String[]{},"");
                                             }
 
                                             @Override
-                                            protected void onPostExecute(Uri uri) {
-                                                super.onPostExecute(uri);
+                                            protected void onPostExecute(Cursor allBusinesses) {
+                                                super.onPostExecute(allBusinesses);
 
-                                                long id = ContentUris.parseId(uri);
-                                                if (id > 0) {
-                                                    Toast.makeText(getBaseContext(), newBusiness.getName() + " Business added", Toast.LENGTH_LONG).show();
-                                                    UpdateListView();
-                                                }
+                                                final Business newBusiness = new Business();
+                                                long bId = GenerateNewID(allBusinesses);
+                                                newBusiness.setId(bId);
+                                                newBusiness.setName(nameText.getText().toString());
+                                                newBusiness.setAddress(addressText.getText().toString());
+                                                newBusiness.setPhone(phoneText.getText().toString());
+                                                newBusiness.setEmail(emailText.getText().toString());
+                                                newBusiness.setWebsite(websiteText.getText().toString());
+
+                                                final ContentValues cv = new ContentValues();
+                                                cv.put(MyContract.Business.BUSINESS_ID, newBusiness.getId());
+                                                cv.put(MyContract.Business.BUSINESS_NAME, newBusiness.getName());
+                                                cv.put(MyContract.Business.BUSINESS_ADDRESS, newBusiness.getAddress());
+                                                cv.put(MyContract.Business.BUSINESS_PHONE, newBusiness.getPhone());
+                                                cv.put(MyContract.Business.BUSINESS_EMAIL, newBusiness.getEmail());
+                                                cv.put(MyContract.Business.BUSINESS_WEBSITE, newBusiness.getWebsite());
+
+                                                new AsyncTask<Void, Void, Uri>() {
+                                                    @Override
+                                                    protected Uri doInBackground(Void... params) {
+                                                        return getContentResolver().insert(MyContract.Business.BUSINESS_URI, cv);
+                                                    }
+
+                                                    @Override
+                                                    protected void onPostExecute(Uri uri) {
+                                                        super.onPostExecute(uri);
+
+                                                        long id = ContentUris.parseId(uri);
+                                                        if (id > 0) {
+                                                            Toast.makeText(getBaseContext(), newBusiness.getName() + " Business added", Toast.LENGTH_LONG).show();
+                                                            UpdateListView();
+                                                        }
+                                                    }
+                                                }.execute();
+
+                                                dialog.cancel();
+
                                             }
                                         }.execute();
-
-                                        dialog.cancel();
-
                                     }
                                 });
 

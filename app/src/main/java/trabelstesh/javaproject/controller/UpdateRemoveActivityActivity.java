@@ -1,8 +1,10 @@
 package trabelstesh.javaproject.controller;
 
 import android.app.DatePickerDialog;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -119,49 +121,100 @@ public class UpdateRemoveActivityActivity extends AppCompatActivity {
 
     public void UpdateActivity(View view) throws Exception {
         Spinner descriptionSpinner =(Spinner) findViewById(R.id.descriptionUpdateSpinner);
-        String description = descriptionSpinner.getSelectedItem().toString().replaceAll(" ", "_");
-        EditText countryText = (EditText)findViewById(R.id.countryUpdateEditText);
+        final String description = descriptionSpinner.getSelectedItem().toString().replaceAll(" ", "_");
+        final EditText countryText = (EditText)findViewById(R.id.countryUpdateEditText);
 
         TextView startDateText = (TextView)findViewById(R.id.startDateUpdateText);
-        String startDate = startDateText.getText().toString();
+        final String startDate = startDateText.getText().toString();
         TextView endDateText = (TextView) findViewById(R.id.endDateUpdateText);
-        String endDate = endDateText.getText().toString();
-        EditText costText = (EditText)findViewById(R.id.CostUpdateText);
-        EditText shortDescText = (EditText)findViewById(R.id.shortDescUpdateText);
+        final String endDate = endDateText.getText().toString();
+        final EditText costText = (EditText)findViewById(R.id.CostUpdateText);
+        final EditText shortDescText = (EditText)findViewById(R.id.shortDescUpdateText);
         Spinner bIdSpinner = (Spinner)findViewById(R.id.businessIdUpdateSpinner);
-        String bName = bIdSpinner.getSelectedItem().toString();
-        Cursor allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI, new String[]{},"",new String[]{},"");
-        Long bId = FindBIdByName(bName, allBusinesses);
-        if (bId < 0) throw new Exception("Problem with business ID");
+        final String bName = bIdSpinner.getSelectedItem().toString();
 
-        Activity updatedActivity = new Activity();
-        updatedActivity.setId(aId);
-        updatedActivity.setDescription(description);
-        updatedActivity.setCountry(countryText.getText().toString());
-        updatedActivity.setStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(startDate));
-        updatedActivity.setEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(endDate));
-        updatedActivity.setCost(Integer.parseInt(costText.getText().toString()));
-        updatedActivity.setShortDescription(shortDescText.getText().toString());
-        updatedActivity.setBusinessId(bId);
+        new AsyncTask<Void, Void, Cursor>() {
+            @Override
+            protected Cursor doInBackground(Void... params) {
+                return getContentResolver().query(MyContract.Business.BUSINESS_URI, new String[]{},"",new String[]{},"");
+            }
 
-        ContentValues cv = new ContentValues();
-        cv.put(MyContract.Activity.ACTIVITY_ID, updatedActivity.getId());
-        cv.put(MyContract.Activity.ACTIVITY_DESCRIPTION, updatedActivity.getDescription().toString());
-        cv.put(MyContract.Activity.ACTIVITY_COUNTRY, updatedActivity.getCountry());
-        cv.put(MyContract.Activity.ACTIVITY_START_DATE, new SimpleDateFormat("dd/MM/yyyy").format(updatedActivity.getStartDate()));
-        cv.put(MyContract.Activity.ACTIVITY_END_DATE, new SimpleDateFormat("dd/MM/yyyy").format(updatedActivity.getEndDate()));
-        cv.put(MyContract.Activity.ACTIVITY_COST, updatedActivity.getCost());
-        cv.put(MyContract.Activity.ACTIVITY_SHORT_DESCRIPTION, updatedActivity.getShortDescription());
-        cv.put(MyContract.Activity.ACTIVITY_BUSINESS_ID, updatedActivity.getBusinessId());
-        getContentResolver().update(MyContract.Activity.ACTIVITY_URI, cv, "_id = ?", new String[]{String.valueOf(aId)});
-        Toast.makeText(getApplicationContext(), "activity updated", Toast.LENGTH_SHORT).show();
-        this.finish();
+            @Override
+            protected void onPostExecute(Cursor allBusinesses) {
+                super.onPostExecute(allBusinesses);
+
+                Long bId = FindBIdByName(bName, allBusinesses);
+                if (bId < 0) try {
+                    throw new Exception("Problem with business ID");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                Activity updatedActivity = new Activity();
+                updatedActivity.setId(aId);
+                updatedActivity.setDescription(description);
+                updatedActivity.setCountry(countryText.getText().toString());
+                try {
+                    updatedActivity.setStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(startDate));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    updatedActivity.setEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(endDate));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                updatedActivity.setCost(Integer.parseInt(costText.getText().toString()));
+                updatedActivity.setShortDescription(shortDescText.getText().toString());
+                updatedActivity.setBusinessId(bId);
+
+                final ContentValues cv = new ContentValues();
+                cv.put(MyContract.Activity.ACTIVITY_ID, updatedActivity.getId());
+                cv.put(MyContract.Activity.ACTIVITY_DESCRIPTION, updatedActivity.getDescription().toString());
+                cv.put(MyContract.Activity.ACTIVITY_COUNTRY, updatedActivity.getCountry());
+                cv.put(MyContract.Activity.ACTIVITY_START_DATE, new SimpleDateFormat("dd/MM/yyyy").format(updatedActivity.getStartDate()));
+                cv.put(MyContract.Activity.ACTIVITY_END_DATE, new SimpleDateFormat("dd/MM/yyyy").format(updatedActivity.getEndDate()));
+                cv.put(MyContract.Activity.ACTIVITY_COST, updatedActivity.getCost());
+                cv.put(MyContract.Activity.ACTIVITY_SHORT_DESCRIPTION, updatedActivity.getShortDescription());
+                cv.put(MyContract.Activity.ACTIVITY_BUSINESS_ID, updatedActivity.getBusinessId());
+
+                new AsyncTask<Void, Void, Integer>() {
+                    @Override
+                    protected Integer doInBackground(Void... params) {
+                        return getContentResolver().update(MyContract.Activity.ACTIVITY_URI, cv, "_id = ?", new String[]{String.valueOf(aId)});
+                    }
+
+                    @Override
+                    protected void onPostExecute(Integer result) {
+                        super.onPostExecute(result);
+
+                        if (result > 0){
+                            Toast.makeText(getApplicationContext(), "activity updated", Toast.LENGTH_SHORT).show();
+                            UpdateRemoveActivityActivity.this.finish();
+                        }
+                    }
+                }.execute();
+            }
+        }.execute();
     }
     public void DeleteActivity(View view)
     {
-        getContentResolver().delete(MyContract.Activity.ACTIVITY_URI,"_id = ?", new String[]{String.valueOf(aId)});
-        Toast.makeText(getApplicationContext(), "activity deleted", Toast.LENGTH_SHORT).show();
-        this.finish();
+        new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return getContentResolver().delete(MyContract.Activity.ACTIVITY_URI,"_id = ?", new String[]{String.valueOf(aId)});
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                super.onPostExecute(result);
+
+                if (result > 0){
+                    Toast.makeText(getApplicationContext(), "activity deleted", Toast.LENGTH_SHORT).show();
+                    UpdateRemoveActivityActivity.this.finish();
+                }
+            }
+        }.execute();
     }
 
     private String[] DescriptionWithSpaces(Description[] values)
