@@ -56,7 +56,7 @@
             android:name=".controller.AllActivitiesActivity"
             android:label="@string/title_activity_all_activities"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".controller.UpdateRemoveActivity"></activity>
+        <activity android:name=".controller.UpdateRemoveActivityActivity"></activity>
     </application>
 
 </manifest>

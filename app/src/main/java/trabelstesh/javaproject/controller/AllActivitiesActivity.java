@@ -2,6 +2,7 @@ package trabelstesh.javaproject.controller;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -19,17 +20,16 @@ public class AllActivitiesActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Cursor allActivities = getContentResolver().query(MyContract.Activity.ACTIVITY_URI, new String[]{}, "", new String[]{}, "");
-        PopulateListView(allActivities);
+        UpdateListView();
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_activities);
 
-        Cursor allActivities = getContentResolver().query(MyContract.Activity.ACTIVITY_URI, new String[]{}, "", new String[]{}, "");
-        PopulateListView(allActivities);
+        UpdateListView();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -44,27 +44,40 @@ public class AllActivitiesActivity extends AppCompatActivity {
         });
     }
 
-    private void PopulateListView(Cursor activities) {
-        // Find ListView to populate
-        ListView lvItems = (ListView) findViewById(R.id.activitiesLV);
-        // Setup cursor adapter using cursor from last step
-        ActivityCursorAdapter activityCursorAdapter = new ActivityCursorAdapter(this, activities);
-        // Attach cursor adapter to the ListView
-        lvItems.setAdapter(activityCursorAdapter);
-
-        final Intent regintent = new Intent(this, UpdateRemoveActivity.class);
-        lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+    private void UpdateListView()
+    {
+        new AsyncTask<Void, Void, Cursor>() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                final Cursor listViewRow = (Cursor) parent.getItemAtPosition(position);
-                long aId = listViewRow.getLong(listViewRow.getColumnIndex(MyContract.Activity.ACTIVITY_ID));
-                Bundle sendRowToActivity = new Bundle();
-                sendRowToActivity.putLong(MyContract.Activity.ACTIVITY_ID, aId);
-                regintent.putExtras(sendRowToActivity);
-                startActivity(regintent);
-                return false;
+            protected Cursor doInBackground(Void... params) {
+                return getContentResolver().query(MyContract.Activity.ACTIVITY_URI, new String[]{}, "", new String[]{}, "");
             }
-        });
+
+            @Override
+            protected void onPostExecute(Cursor cursor) {
+                super.onPostExecute(cursor);
+
+                // Find ListView to populate
+                ListView lvItems = (ListView) findViewById(R.id.activitiesLV);
+                // Setup cursor adapter using cursor from last step
+                ActivityCursorAdapter activityCursorAdapter = new ActivityCursorAdapter(AllActivitiesActivity.this, cursor);
+                // Attach cursor adapter to the ListView
+                lvItems.setAdapter(activityCursorAdapter);
+
+                final Intent regintent = new Intent(AllActivitiesActivity.this, UpdateRemoveActivityActivity.class);
+                lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                        final Cursor listViewRow = (Cursor) parent.getItemAtPosition(position);
+                        long aId = listViewRow.getLong(listViewRow.getColumnIndex(MyContract.Activity.ACTIVITY_ID));
+                        Bundle sendRowToActivity = new Bundle();
+                        sendRowToActivity.putLong(MyContract.Activity.ACTIVITY_ID, aId);
+                        regintent.putExtras(sendRowToActivity);
+                        startActivity(regintent);
+                        return false;
+                    }
+                });
+            }
+        }.execute();
     }
 }
 

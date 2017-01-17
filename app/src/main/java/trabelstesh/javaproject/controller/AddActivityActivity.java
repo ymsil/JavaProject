@@ -3,6 +3,7 @@ package trabelstesh.javaproject.controller;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -40,50 +41,29 @@ public class AddActivityActivity extends AppCompatActivity {
         String today = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
         startDateText.setText(today);
         endDateText.setText(today);
-        Cursor allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI, new String[]{},"",new String[]{},"");
-        int businessNameColumnIndex = allBusinesses.getColumnIndex(MyContract.Business.BUSINESS_NAME);
-        int i = 0;
-        String [] businessNames = new String[allBusinesses.getCount()];
-        while (allBusinesses.moveToNext())
-        {
-            businessNames[i++] = allBusinesses.getString(businessNameColumnIndex);
-        }
-        Spinner BusinessSpinner = (Spinner) findViewById(R.id.businessSpinner);
-        BusinessSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, businessNames));
-    }
 
-    private String[] DescriptionWithSpaces(Description[] values)
-    {
-        String stringValue;
-        String[] newDesc = new String[values.length];
-        int i = 0;
-        for (Description desc : values)
-        {
-            stringValue = desc.toString();
-            stringValue = stringValue.replaceAll("_", " ");
-            newDesc[i++] = stringValue;
-        }
-        return newDesc;
-    }
+        Cursor allBusinesses;
+        new AsyncTask<Void, Void, Cursor>() {
+            @Override
+            protected Cursor doInBackground(Void... params) {
+                return getContentResolver().query(MyContract.Business.BUSINESS_URI, new String[]{},"",new String[]{},"");
+            }
 
-    public void OpenCalendar(View view)
-    {
-        Calendar c = Calendar.getInstance();
-        int year, month, day;
-        year = c.get(Calendar.YEAR);
-        month = c.get(Calendar.MONTH);
-        day = c.get(Calendar.DAY_OF_MONTH);
+            @Override
+            protected void onPostExecute(Cursor allBusinesses) {
+                super.onPostExecute(allBusinesses);
 
-        final TextView textView=(TextView) view;
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                new DatePickerDialog.OnDateSetListener() {
-
-                    @Override
-                    public void onDateSet(DatePicker view, int year,
-                                          int monthOfYear, int dayOfMonth){
-                        textView.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                    }}, year, month, day);
-        datePickerDialog.show();
+                int businessNameColumnIndex = allBusinesses.getColumnIndex(MyContract.Business.BUSINESS_NAME);
+                int i = 0;
+                String [] businessNames = new String[allBusinesses.getCount()];
+                while (allBusinesses.moveToNext())
+                {
+                    businessNames[i++] = allBusinesses.getString(businessNameColumnIndex);
+                }
+                Spinner BusinessSpinner = (Spinner) findViewById(R.id.businessSpinner);
+                BusinessSpinner.setAdapter(new ArrayAdapter<>(AddActivityActivity.this, android.R.layout.simple_spinner_item, businessNames));
+            }
+        }.execute();
     }
 
     public void AddActivity(View view) throws Exception
@@ -131,6 +111,46 @@ public class AddActivityActivity extends AppCompatActivity {
         this.finish();
     }
 
+    public void Back(View view)
+    {
+        Toast.makeText(getApplicationContext(),"didn't add any activities", Toast.LENGTH_SHORT).show();
+        this.finish();
+    }
+
+    private String[] DescriptionWithSpaces(Description[] values)
+    {
+        String stringValue;
+        String[] newDesc = new String[values.length];
+        int i = 0;
+        for (Description desc : values)
+        {
+            stringValue = desc.toString();
+            stringValue = stringValue.replaceAll("_", " ");
+            newDesc[i++] = stringValue;
+        }
+        return newDesc;
+    }
+
+    public void OpenCalendar(View view)
+    {
+        Calendar c = Calendar.getInstance();
+        int year, month, day;
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+
+        final TextView textView=(TextView) view;
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth){
+                        textView.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                    }}, year, month, day);
+        datePickerDialog.show();
+    }
+
     private Long FindBIdByName(String bName, Cursor businesses)
     {
         int bNameColumnIndex = businesses.getColumnIndex(MyContract.Business.BUSINESS_NAME);
@@ -157,11 +177,5 @@ public class AddActivityActivity extends AppCompatActivity {
             if (isNew) return newID;
         }
         return newID;
-    }
-
-    public void Back(View view)
-    {
-        Toast.makeText(getApplicationContext(),"didn't add any activities", Toast.LENGTH_SHORT).show();
-        this.finish();
     }
 }

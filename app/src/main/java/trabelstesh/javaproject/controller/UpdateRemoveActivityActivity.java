@@ -3,6 +3,7 @@ package trabelstesh.javaproject.controller;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -22,7 +23,7 @@ import trabelstesh.javaproject.model.backend.MyContract;
 import trabelstesh.javaproject.model.entities.Activity;
 import trabelstesh.javaproject.model.entities.Description;
 
-public class UpdateRemoveActivity extends AppCompatActivity {
+public class UpdateRemoveActivityActivity extends AppCompatActivity {
 
     long aId;
 
@@ -31,55 +32,89 @@ public class UpdateRemoveActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_remove);
 
-        Spinner descriptionSpinner =(Spinner) findViewById(R.id.descriptionUpdateSpinner);
+        final Spinner descriptionSpinner =(Spinner) findViewById(R.id.descriptionUpdateSpinner);
         String[] Desc = DescriptionWithSpaces(Description.values());
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, Desc);
+        final ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, Desc);
         descriptionSpinner.setAdapter(arrayAdapter);
-        EditText countryText = (EditText)findViewById(R.id.countryUpdateEditText);
-        TextView startDateText = (TextView)findViewById(R.id.startDateUpdateText);
-        TextView endDateText = (TextView) findViewById(R.id.endDateUpdateText);
-        EditText costText = (EditText)findViewById(R.id.CostUpdateText);
-        EditText shortDescText = (EditText)findViewById(R.id.shortDescUpdateText);
-        Cursor allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI, new String[]{},"",new String[]{},"");
-        int businessNameColumnIndex = allBusinesses.getColumnIndex(MyContract.Business.BUSINESS_NAME);
-        int i = 0;
-        String [] businessNames = new String[allBusinesses.getCount()];
-        while (allBusinesses.moveToNext())
-        {
-            businessNames[i++] = allBusinesses.getString(businessNameColumnIndex);
-        }
-        Spinner bIdSpinner = (Spinner)findViewById(R.id.businessIdUpdateSpinner);
-        ArrayAdapter businessArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, businessNames);
-        bIdSpinner.setAdapter(businessArrayAdapter);
+        final EditText countryText = (EditText)findViewById(R.id.countryUpdateEditText);
+        final TextView startDateText = (TextView)findViewById(R.id.startDateUpdateText);
+        final TextView endDateText = (TextView) findViewById(R.id.endDateUpdateText);
+        final EditText costText = (EditText)findViewById(R.id.CostUpdateText);
+        final EditText shortDescText = (EditText)findViewById(R.id.shortDescUpdateText);
 
-        Bundle getRowFromActivity = getIntent().getExtras();
+        new AsyncTask<Void, Void, Cursor>() {
+            @Override
+            protected Cursor doInBackground(Void... params) {
+                return getContentResolver().query(MyContract.Business.BUSINESS_URI, new String[]{},"",new String[]{},"");
+            }
 
-        aId = -1;
-        if (getRowFromActivity != null) aId = getRowFromActivity.getLong(MyContract.Activity.ACTIVITY_ID);
+            @Override
+            protected void onPostExecute(Cursor allBusinesses) {
+                super.onPostExecute(allBusinesses);
 
-        Cursor allActivities = getContentResolver().query(MyContract.Activity.ACTIVITY_URI, new String[]{},"",new String[]{},"");
-        while(allActivities.moveToNext())
-        {
-            if (allActivities.getLong(allActivities.getColumnIndex(MyContract.Activity.ACTIVITY_ID)) == aId)
-            {
-                String oldDescription = allActivities.getString(allActivities.getColumnIndex(MyContract.Activity.ACTIVITY_DESCRIPTION));
-                descriptionSpinner.setSelection(arrayAdapter.getPosition(oldDescription));
-                countryText.setText(allActivities.getString(allActivities.getColumnIndex(MyContract.Activity.ACTIVITY_COUNTRY)));
-                startDateText.setText(allActivities.getString(allActivities.getColumnIndex(MyContract.Activity.ACTIVITY_START_DATE)));
-                endDateText.setText(allActivities.getString(allActivities.getColumnIndex(MyContract.Activity.ACTIVITY_END_DATE)));
-                costText.setText(allActivities.getString(allActivities.getColumnIndex(MyContract.Activity.ACTIVITY_COST)));
-                shortDescText.setText(allActivities.getString(allActivities.getColumnIndex(MyContract.Activity.ACTIVITY_SHORT_DESCRIPTION)));
-                long oldBID = allActivities.getLong(allActivities.getColumnIndex(MyContract.Activity.ACTIVITY_BUSINESS_ID));
-                allBusinesses = getContentResolver().query(MyContract.Business.BUSINESS_URI, new String[]{},"",new String[]{},"");
-                String oldBIDname = null;
+                final int businessNameColumnIndex = allBusinesses.getColumnIndex(MyContract.Business.BUSINESS_NAME);
+                int i = 0;
+                String [] businessNames = new String[allBusinesses.getCount()];
                 while (allBusinesses.moveToNext())
                 {
-                    if (allBusinesses.getLong(allBusinesses.getColumnIndex(MyContract.Business.BUSINESS_ID)) == oldBID)
-                                  oldBIDname = allBusinesses.getString(businessNameColumnIndex);
+                    businessNames[i++] = allBusinesses.getString(businessNameColumnIndex);
                 }
-                bIdSpinner.setSelection(businessArrayAdapter.getPosition(oldBIDname));
+                final Spinner bIdSpinner = (Spinner)findViewById(R.id.businessIdUpdateSpinner);
+                final ArrayAdapter businessArrayAdapter = new ArrayAdapter<>(UpdateRemoveActivityActivity.this, android.R.layout.simple_spinner_item, businessNames);
+                bIdSpinner.setAdapter(businessArrayAdapter);
+
+                Bundle getRowFromActivity = getIntent().getExtras();
+
+                aId = -1;
+                if (getRowFromActivity != null) aId = getRowFromActivity.getLong(MyContract.Activity.ACTIVITY_ID);
+
+                new AsyncTask<Void, Void, Cursor>() {
+                    @Override
+                    protected Cursor doInBackground(Void... params) {
+                        return getContentResolver().query(MyContract.Activity.ACTIVITY_URI, new String[]{},"",new String[]{},"");
+                    }
+
+                    @Override
+                    protected void onPostExecute(Cursor allActivities) {
+                        super.onPostExecute(allActivities);
+
+                        while(allActivities.moveToNext())
+                        {
+                            if (allActivities.getLong(allActivities.getColumnIndex(MyContract.Activity.ACTIVITY_ID)) == aId)
+                            {
+                                String oldDescription = allActivities.getString(allActivities.getColumnIndex(MyContract.Activity.ACTIVITY_DESCRIPTION));
+                                descriptionSpinner.setSelection(arrayAdapter.getPosition(oldDescription));
+                                countryText.setText(allActivities.getString(allActivities.getColumnIndex(MyContract.Activity.ACTIVITY_COUNTRY)));
+                                startDateText.setText(allActivities.getString(allActivities.getColumnIndex(MyContract.Activity.ACTIVITY_START_DATE)));
+                                endDateText.setText(allActivities.getString(allActivities.getColumnIndex(MyContract.Activity.ACTIVITY_END_DATE)));
+                                costText.setText(allActivities.getString(allActivities.getColumnIndex(MyContract.Activity.ACTIVITY_COST)));
+                                shortDescText.setText(allActivities.getString(allActivities.getColumnIndex(MyContract.Activity.ACTIVITY_SHORT_DESCRIPTION)));
+                                final long oldBID = allActivities.getLong(allActivities.getColumnIndex(MyContract.Activity.ACTIVITY_BUSINESS_ID));
+
+                                new AsyncTask<Void, Void, Cursor>() {
+                                    @Override
+                                    protected Cursor doInBackground(Void... params) {
+                                        return getContentResolver().query(MyContract.Business.BUSINESS_URI, new String[]{},"",new String[]{},"");
+                                    }
+
+                                    @Override
+                                    protected void onPostExecute(Cursor allBusinesses) {
+                                        super.onPostExecute(allBusinesses);
+                                        String oldBIDname = null;
+                                        while (allBusinesses.moveToNext())
+                                        {
+                                            if (allBusinesses.getLong(allBusinesses.getColumnIndex(MyContract.Business.BUSINESS_ID)) == oldBID)
+                                                oldBIDname = allBusinesses.getString(businessNameColumnIndex);
+                                        }
+                                        bIdSpinner.setSelection(businessArrayAdapter.getPosition(oldBIDname));
+                                    }
+                                }.execute();
+                            }
+                        }
+                    }
+                }.execute();
             }
-        }
+        }.execute();
     }
 
     public void UpdateActivity(View view) throws Exception {
