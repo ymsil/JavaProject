@@ -7,14 +7,7 @@ try {
 	else
 		$id = 'NULL';
 
-	$name = $_REQUEST["name"];
-	$address = $_REQUEST["address"];
-	$phone = $_REQUEST["phone"];
-	$email = $_REQUEST["email"];
-	$website = $_REQUEST["website"];
-
-	$sql = "INSERT INTO `business_table`( `_id`, `name`, `address`, `phone`, `email` , `website`)
-	        VALUES ('$id', '$name', '$address', '$phone', '$email', '$website')";
+	$sql = "DELETE FROM `user_table` WHERE `_id`='$id' ";
 
 	if ($conn->query($sql) === TRUE) {
 		$last_id = $conn->insert_id;

@@ -13,8 +13,9 @@ try {
 	$email = $_REQUEST["email"];
 	$website = $_REQUEST["website"];
 
-	$sql = "INSERT INTO `business_table`( `_id`, `name`, `address`, `phone`, `email` , `website`)
-	        VALUES ('$id', '$name', '$address', '$phone', '$email', '$website')";
+	$sql = "UPDATE `business_table`
+	        SET `name`='$name', `address`='$address', `phone`='$phone', `email`='$email' , `website`='website'
+	        WHERE `_id`='$id' ";
 
 	if ($conn->query($sql) === TRUE) {
 		$last_id = $conn->insert_id;

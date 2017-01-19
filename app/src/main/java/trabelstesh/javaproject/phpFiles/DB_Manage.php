@@ -3,8 +3,8 @@
 
 header('Content-Type: text/html; charset=utf-8');
 $servername = "localhost";
-$username = "staszews";
-$password = "troublestesh";
+$username = "stesh";
+$password = "28041991";
 $dbname = "troubleDB";
 
 

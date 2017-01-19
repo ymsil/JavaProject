@@ -8,13 +8,11 @@ try {
 		$id = 'NULL';
 
 	$name = $_REQUEST["name"];
-	$address = $_REQUEST["address"];
-	$phone = $_REQUEST["phone"];
-	$email = $_REQUEST["email"];
-	$website = $_REQUEST["website"];
+	$password = $_REQUEST["password"];
 
-	$sql = "INSERT INTO `business_table`( `_id`, `name`, `address`, `phone`, `email` , `website`)
-	        VALUES ('$id', '$name', '$address', '$phone', '$email', '$website')";
+	$sql = "UPDATE `user_table`
+	        SET `name`='$name', `password`='$password'
+	        WHERE `_id`='$id' ";
 
 	if ($conn->query($sql) === TRUE) {
 		$last_id = $conn->insert_id;

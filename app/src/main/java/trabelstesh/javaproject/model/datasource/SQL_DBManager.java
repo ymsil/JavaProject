@@ -20,8 +20,7 @@ import trabelstesh.javaproject.model.backend.MyContract;
 
 public class SQL_DBManager implements IDB_manager
 {
-    private final String WEB_URL = "http://staszews.vlab.jct.ac.il/Academy/";
-    /* TODo: need to use AsyncTask inorder for these functions to work LIKE academy08example */
+    private final String WEB_URL = "http://staszews.vlab.jct.ac.il/php";
     /* TODo: continue implementing updates & deletes */
     public static boolean changed = false;
 
@@ -73,33 +72,121 @@ public class SQL_DBManager implements IDB_manager
     }
 
     @Override
-    public boolean UpdateUser(long id, ContentValues contentValues) {
-        return false;
+    public boolean UpdateUser(long id, ContentValues values)
+    {
+        try
+        {
+            String result = PHPtools.POST(WEB_URL + "/updateUser.php", values);
+            int check = Integer.parseInt(result);
+            if (check != 0) return true;
+            else return false;
+        } catch (IOException e)
+        {
+            Log.d(this.getClass().getName(),"\nupdateUser Exception:\n" + e);
+            return false;
+        }
     }
 
     @Override
-    public boolean UpdateBusiness(long id, ContentValues contentValues) {
-        return false;
+    public boolean UpdateBusiness(long id, ContentValues values)
+    {
+        try
+        {
+            String result = PHPtools.POST(WEB_URL + "/updateBusiness.php", values);
+            int check = Integer.parseInt(result);
+            if (check != 0)
+            {
+                changed = true;
+                return true;
+            }
+            else return false;
+        } catch (IOException e)
+        {
+            Log.d(this.getClass().getName(),"\nupdateBusiness Exception:\n" + e);
+            return false;
+        }
     }
 
     @Override
-    public boolean UpdateActivity(long id, ContentValues contentValues) {
-        return false;
+    public boolean UpdateActivity(long id, ContentValues values)
+    {
+        try
+        {
+            String result = PHPtools.POST(WEB_URL + "/updateActivity.php", values);
+            int check = Integer.parseInt(result);
+            if (check != 0)
+            {
+                changed = true;
+                return true;
+            }
+            else return false;
+        } catch (IOException e)
+        {
+            Log.d(this.getClass().getName(),"\nupdateActivity Exception:\n" + e);
+            return false;
+        }
     }
 
     @Override
-    public boolean DeleteUser(long id) {
-        return false;
+    public boolean DeleteUser(long id)
+    {
+        try
+        {
+            ContentValues cv =new ContentValues();
+            cv.put(MyContract.User.USER_ID, id);
+            String result = PHPtools.POST(WEB_URL + "/deleteUser.php", cv);
+            int check = Integer.parseInt(result);
+            if (check != 0) return true;
+            else return false;
+        } catch (IOException e)
+        {
+            Log.d(this.getClass().getName(),"\ndeleteUser Exception:\n" + e);
+            return false;
+        }
     }
 
     @Override
-    public boolean DeleteBusiness(long id) {
-        return false;
+    public boolean DeleteBusiness(long id)
+    {
+        try
+        {
+            ContentValues cv =new ContentValues();
+            cv.put(MyContract.Business.BUSINESS_ID, id);
+            String result = PHPtools.POST(WEB_URL + "/deleteBusiness.php", cv);
+            int check = Integer.parseInt(result);
+            if (check != 0)
+            {
+                changed = true;
+                return true;
+            }
+            else return false;
+        } catch (IOException e)
+        {
+            Log.d(this.getClass().getName(),"\ndeleteBusiness Exception:\n" + e);
+            return false;
+        }
     }
 
     @Override
-    public boolean DeleteActivity(long id) {
-        return false;
+    public boolean DeleteActivity(long id)
+    {
+        try
+        {
+            ContentValues cv =new ContentValues();
+            cv.put(MyContract.Activity.ACTIVITY_ID, id);
+            String result = PHPtools.POST(WEB_URL + "/deleteActivity.php", cv);
+            int check = Integer.parseInt(result);
+            if (check != 0)
+            {
+                changed = true;
+                return true;
+            }
+            else return false;
+        } catch (IOException e)
+        {
+            Log.d(this.getClass().getName(),"\ndeleteActivity Exception:\n" + e);
+            return false;
+        }
     }
 
     @Override
@@ -217,7 +304,13 @@ public class SQL_DBManager implements IDB_manager
     }
 
     @Override
-    public boolean isUpdated() {
+    public boolean isUpdated()
+    {
+        if (changed)
+        {
+            changed = false;
+            return true;
+        }
         return false;
     }
 }

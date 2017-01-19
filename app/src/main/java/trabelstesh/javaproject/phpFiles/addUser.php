@@ -8,7 +8,7 @@ try {
 		$id = 'NULL';
 
 	$name = $_REQUEST["name"];
-	$password = $_REQUEST["password"]
+	$password = $_REQUEST["password"];
 
 	$sql = "INSERT INTO `user_table`( `_id`, `name`, `password`) VALUES ('$id', '$name', '$password')";
 

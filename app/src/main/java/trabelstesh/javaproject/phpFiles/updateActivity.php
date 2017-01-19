@@ -15,8 +15,10 @@ try {
 	$short_description = $_REQUEST["short_description"];
 	$activity_business_id = $_REQUEST["activity_business_id"];
 
-	$sql = "INSERT INTO `activity_table`( `_id`, `description`, `country`, `start_date`, `end_date`, `cost` , `short_description`, `activity_business_id`)
-	        VALUES ('$id', '$description', '$country', '$start_date', '$end_date', '$cost', '$short_description', '$activity_business_id')";
+	$sql = "UPDATE `activity_table`
+	        SET `description`='$description', `country`='$country', `start_date`='$start_date', `end_date`='$end_date',
+	            `cost`='$cost', `short_description`='$short_description', `activity_business_id`='$activity_business_id'
+	        WHERE `_id` = '$id' ";
 
 	if ($conn->query($sql) === TRUE) {
 		$last_id = $conn->insert_id;

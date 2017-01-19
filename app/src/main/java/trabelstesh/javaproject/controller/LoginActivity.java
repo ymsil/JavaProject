@@ -207,7 +207,7 @@ public class LoginActivity extends AppCompatActivity
             protected void onPostExecute(Cursor allUsers) {
                 super.onPostExecute(allUsers);
 
-                while (allUsers.moveToNext())
+                while ( allUsers != null && allUsers.moveToNext() )
                 {
                     if (((User) allUsers).getName() == name)
                         if (((User) allUsers).getPassword() == password)
@@ -275,7 +275,7 @@ public class LoginActivity extends AppCompatActivity
         {
             newID = random.nextInt(1000)+1;
             isNew = true;
-            while (users.moveToNext())
+            while (users != null && users.moveToNext())
                 if ( ((User)users).getId() == newID ) isNew = false;
             if (isNew) return newID;
         }
