@@ -48,7 +48,7 @@ public class AddActivityActivity extends AppCompatActivity {
         new AsyncTask<Void, Void, Cursor>() {
             @Override
             protected Cursor doInBackground(Void... params) {
-                return getContentResolver().query(MyContract.Business.BUSINESS_URI, new String[]{},"",new String[]{},"");
+                return getContentResolver().query(MyContract.Business.BUSINESS_URI,null, null, null, null, null);
             }
 
             @Override
@@ -85,7 +85,7 @@ public class AddActivityActivity extends AppCompatActivity {
         new AsyncTask<Void, Void, Cursor>() {
             @Override
             protected Cursor doInBackground(Void... params) {
-                return getContentResolver().query(MyContract.Business.BUSINESS_URI, new String[]{},"",new String[]{},"");
+                return getContentResolver().query(MyContract.Business.BUSINESS_URI, null, null, null, null, null);
             }
 
             @Override
@@ -102,7 +102,7 @@ public class AddActivityActivity extends AppCompatActivity {
                 new AsyncTask<Void, Void, Cursor>() {
                     @Override
                     protected Cursor doInBackground(Void... params) {
-                        return getContentResolver().query(MyContract.Activity.ACTIVITY_URI, new String[]{},"",new String[]{},"");
+                        return getContentResolver().query(MyContract.Activity.ACTIVITY_URI, null, null, null, null, null);
                     }
 
                     @Override

@@ -23,7 +23,8 @@ public class MyContentProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Cursor query(Uri uri, String[] strings, String s, String[] strings1, String s1)
+    public Cursor query(Uri uri, String[] projection, String selection,
+                        String[] selectionArgs, String sortOrder)
     {
         Log.d(TAG, "query " + uri.toString());
 
@@ -35,7 +36,7 @@ public class MyContentProvider extends ContentProvider {
             case "businesses":
                 return manager.GetAllBusinesses();
             case "activities":
-                return manager.GetAllActivities();//
+                return manager.GetAllActivities();
         }
         return null;
     }
@@ -78,13 +79,13 @@ public class MyContentProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(Uri uri, String s, String[] strings)
+    public int delete(Uri uri, String selection, String[] selectionArgs)
     {
         Log.d(TAG, "delete " + uri.toString());
 
         String listName = uri.getLastPathSegment();
         //long id = ContentUris.parseId(uri);
-        long id = Long.parseLong(strings[0]);
+        long id = Long.parseLong(selectionArgs[0]);
         switch (listName)
         {
             case "users":

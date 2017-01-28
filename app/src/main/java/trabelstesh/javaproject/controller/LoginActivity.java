@@ -199,59 +199,70 @@ public class LoginActivity extends AppCompatActivity
 
         new AsyncTask<Void, Void, Cursor>() {
             @Override
-            protected Cursor doInBackground(Void... params) {
-                return getContentResolver().query(MyContract.User.USER_URI, new String[]{},"",new String[]{},"");
+            protected Cursor doInBackground(Void... params)
+            {
+                return getContentResolver().query(MyContract.User.USER_URI, null, null, null, null, null);
             }
 
             @Override
             protected void onPostExecute(Cursor allUsers) {
                 super.onPostExecute(allUsers);
+              if ( allUsers.moveToFirst() )
+              {
+                  do
+//                for (int i = 0; i < allUsers.getCount(); i++)
+                  {
+                      if (allUsers.getString(allUsers.getColumnIndex(MyContract.User.USER_NAME)).equals(name ))
+                          if (allUsers.getString(allUsers.getColumnIndex(MyContract.User.USER_PASSWORD)).equals(password))
+                          {
+                              Toast.makeText(getApplicationContext(), "login successful",
+                                      Toast.LENGTH_SHORT).show();
+                              if (isChecked) SaveToSharedPreferences(user);
+                              Intent regintent = new Intent(LoginActivity.this, MenuActivity.class);
+                              startActivity((regintent));
+                          }
+                          else
+                          {
+                              Toast.makeText(getApplicationContext(), "wrong password",
+                                      Toast.LENGTH_SHORT).show();
+                          }
+//                    else
+//                    {
+//                        allUsers.moveToNext();
+//                    }
+                  } while (allUsers.moveToNext());
+              }
+              else
+              {
+                  long randomID = GenerateNewID(allUsers);
+                  user.setId(randomID);
+                  final ContentValues cv = new ContentValues();
+                  cv.put(MyContract.User.USER_ID, user.getId());
+                  cv.put(MyContract.User.USER_NAME, user.getName());
+                  cv.put(MyContract.User.USER_PASSWORD, user.getPassword());
 
-                while ( allUsers != null && allUsers.moveToNext() )
-                {
-                    if (((User) allUsers).getName() == name)
-                        if (((User) allUsers).getPassword() == password)
-                        {
-                            Toast.makeText(getApplicationContext(), "login successful",
-                                    Toast.LENGTH_SHORT).show();
-                            if (isChecked) SaveToSharedPreferences(user);
-                            Intent regintent = new Intent(LoginActivity.this, MenuActivity.class);
-                            startActivity((regintent));
-                        }
-                        else
-                        {
-                            Toast.makeText(getApplicationContext(), "wrong password",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                }
-                long randomID = GenerateNewID(allUsers);
-                user.setId(randomID);
-                final ContentValues cv = new ContentValues();
-                cv.put(MyContract.User.USER_ID, user.getId());
-                cv.put(MyContract.User.USER_NAME, user.getName());
-                cv.put(MyContract.User.USER_PASSWORD, user.getPassword());
+                  new AsyncTask<Void, Void, Uri>() {
+                      @Override
+                      protected Uri doInBackground(Void... params) {
+                          return getContentResolver().insert(MyContract.User.USER_URI, cv);
+                      }
 
-                new AsyncTask<Void, Void, Uri>() {
-                    @Override
-                    protected Uri doInBackground(Void... params) {
-                        return getContentResolver().insert(MyContract.User.USER_URI, cv);
-                    }
+                      @Override
+                      protected void onPostExecute(Uri uri) {
+                          super.onPostExecute(uri);
+                          long id = ContentUris.parseId(uri);
+                          if (id > 0) {
+                              Toast.makeText(getApplicationContext(), "Welcome " + user.getName() + ". new user registered",
+                                      Toast.LENGTH_SHORT).show();
 
-                    @Override
-                    protected void onPostExecute(Uri uri) {
-                        super.onPostExecute(uri);
-                        long id = ContentUris.parseId(uri);
-                        if (id > 0) {
-                            Toast.makeText(getApplicationContext(), "Welcome " + user.getName() + ". new user registered",
-                                    Toast.LENGTH_SHORT).show();
+                              if (isChecked) SaveToSharedPreferences(user);
 
-                            if (isChecked) SaveToSharedPreferences(user);
-
-                            Intent regintent = new Intent(LoginActivity.this, MenuActivity.class);
-                            startActivity((regintent));
-                        }
-                    }
-                }.execute();
+                              Intent regintent = new Intent(LoginActivity.this, MenuActivity.class);
+                              startActivity((regintent));
+                          }
+                      }
+                  }.execute();
+              }
             }
         }.execute();
     }
