@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void EnterClick(View view) {
-        Intent regintent = new Intent(this, LoginActivity.class);
+        Intent regintent = new Intent(this, UsersActivity.class);
         startActivity((regintent));
     }
 }

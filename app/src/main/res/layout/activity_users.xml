@@ -1,0 +1,114 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0099cc"
+    tools:context="trabelstesh.javaproject.controller.LoginActivity">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+    <TextView
+        android:id="@+id/fullscreen_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:keepScreenOn="true"
+        android:text="@string/action_sign_in"
+        android:textColor="#33b5e5"
+        android:textSize="50sp"
+        android:textStyle="bold" />
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:id="@+id/fullscreen_content_controls"
+            style="?metaButtonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@color/black_overlay"
+            android:orientation="horizontal"
+            tools:ignore="UselessParent">
+
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/login_form"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/signInButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/userName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="User Name"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+                <EditText
+                    android:id="@+id/userPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_password"
+                    android:imeActionId="@+id/login"
+                    android:imeActionLabel="@string/action_sign_in_short"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large.Inverse" />
+
+                <Button
+                    android:id="@+id/SignInButton"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Sign In"
+                    android:background="@color/colorPrimary"
+                    android:onClick="OnSignInClick"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Inverse" />
+
+                <CheckBox
+                    android:text="Remember me?"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/RememberMe"
+                    android:layout_weight="1"
+                    android:textAllCaps="false"
+                    android:checked="true"
+                    android:onClick="Unchecked"
+                    />
+
+                <Button
+                    android:id="@+id/RegisterButton"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Register"
+                    android:background="@color/colorPrimary"
+                    android:onClick="OnRegisterClick"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Inverse" />
+
+            </LinearLayout>
+        </ScrollView>
+
+    </FrameLayout>
+
+</FrameLayout>
