@@ -98,14 +98,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/AddNewBusinessButton"
-            android:layout_weight="1
-            "/>
+            android:layout_weight="1"
+            android:onClick="OnClickAddNewBusiness"/>
 
         <Button
             android:text="Cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/noNewBusinessButton"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
     </TableRow>
 </LinearLayout>

@@ -95,7 +95,8 @@ public class MenuActivity extends AppCompatActivity
 
     public void AllBusinesses(View view)
     {
-        Intent regintent = new Intent(this, AllBusinessesActivity.class);
+//        Intent regintent = new Intent(this, AllBusinessesActivity.class);
+        Intent regintent = new Intent(this, BusinessActivity.class);
         startActivity((regintent));
     }
 

@@ -1,6 +1,5 @@
 package trabelstesh.javaproject.controller;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,8 +19,6 @@ import java.util.Random;
 import trabelstesh.javaproject.R;
 import trabelstesh.javaproject.model.backend.MyContract;
 import trabelstesh.javaproject.model.entities.User;
-
-import static android.R.attr.id;
 
 public class UsersActivity extends AppCompatActivity
 {
@@ -66,6 +63,7 @@ public class UsersActivity extends AppCompatActivity
                     user.setPassword(users.getString(users.getColumnIndex(MyContract.User.USER_PASSWORD)));
                     allUsers.add(user);
                 }
+                users.close();
                 return allUsers;
             }
         }.execute();
@@ -141,7 +139,6 @@ public class UsersActivity extends AppCompatActivity
 
                     return uri;
                 }
-
             }.execute();
             Toast.makeText(getApplicationContext(), "Welcome " + name + ". new user registered",
                     Toast.LENGTH_SHORT).show();

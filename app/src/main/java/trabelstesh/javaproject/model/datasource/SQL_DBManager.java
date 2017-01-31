@@ -150,9 +150,10 @@ public class SQL_DBManager implements IDB_manager
     {
         try
         {
-            ContentValues cv =new ContentValues();
+            ContentValues cv = new ContentValues();
             cv.put(MyContract.Business.BUSINESS_ID, id);
             String result = PHPtools.POST(WEB_URL + "/deleteBusiness.php", cv);
+
             int check = Integer.parseInt(result);
             if (check != 0)
             {

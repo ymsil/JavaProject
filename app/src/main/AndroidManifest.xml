@@ -42,11 +42,6 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity
-            android:name=".controller.LoginActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_login"
-            android:theme="@style/FullscreenTheme" />
         <activity android:name=".controller.MenuActivity" />
         <activity android:name=".controller.AddActivityActivity" />
         <activity
@@ -59,12 +54,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".controller.UpdateRemoveActivityActivity" />
         <activity
-            android:name=".UsersActivity"
-            android:label="@string/title_activity_users" />
-        <activity
             android:name=".controller.UsersActivity"
             android:label="@string/title_activity_users"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".controller.BusinessActivity"></activity>
     </application>
 
 </manifest>
