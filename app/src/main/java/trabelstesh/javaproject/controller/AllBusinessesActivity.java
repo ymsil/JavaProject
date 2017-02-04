@@ -41,7 +41,8 @@ public class AllBusinessesActivity extends AppCompatActivity
         final Dialog dialog = new Dialog(this);
         UpdateListView();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.businessesToolbar);
+        toolbar.setTitle("Businesses list:");
         setSupportActionBar(toolbar);
 
         FloatingActionButton addActionButton = (FloatingActionButton) findViewById(R.id.addActionButton);
@@ -236,12 +237,10 @@ public class AllBusinessesActivity extends AppCompatActivity
                                     }
 
                                     @Override
-                                    protected void onPostExecute(Integer result) {
+                                    protected void onPostExecute(Integer result)
+                                    {
                                         super.onPostExecute(result);
-                                        if (result > 0)
-                                        {
-                                            Toast.makeText(getApplicationContext(), updatedBusiness.getName() + " Business updated", Toast.LENGTH_SHORT).show();
-                                        }
+                                        Toast.makeText(getApplicationContext(), updatedBusiness.getName() + " Business updated", Toast.LENGTH_SHORT).show();
                                     }
                                 }.execute();
                                 updateDeleteDialog.cancel();
@@ -283,6 +282,7 @@ public class AllBusinessesActivity extends AppCompatActivity
                                                 new String[]{id});
                                     }
                                 }.execute();
+                                Toast.makeText(getApplicationContext(), "business deleted", Toast.LENGTH_SHORT).show();
                                 updateDeleteDialog.cancel();
                                 UpdateListView();
                             }

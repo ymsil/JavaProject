@@ -119,7 +119,8 @@ public class UpdateRemoveActivityActivity extends AppCompatActivity {
         }.execute();
     }
 
-    public void UpdateActivity(View view) throws Exception {
+    public void UpdateActivity(View view) throws Exception
+    {
         Spinner descriptionSpinner =(Spinner) findViewById(R.id.descriptionUpdateSpinner);
         final String description = descriptionSpinner.getSelectedItem().toString().replaceAll(" ", "_");
         final EditText countryText = (EditText)findViewById(R.id.countryUpdateEditText);
@@ -135,12 +136,14 @@ public class UpdateRemoveActivityActivity extends AppCompatActivity {
 
         new AsyncTask<Void, Void, Cursor>() {
             @Override
-            protected Cursor doInBackground(Void... params) {
+            protected Cursor doInBackground(Void... params)
+            {
                 return getContentResolver().query(MyContract.Business.BUSINESS_URI, null, null, null, null, null);
             }
 
             @Override
-            protected void onPostExecute(Cursor allBusinesses) {
+            protected void onPostExecute(Cursor allBusinesses)
+            {
                 super.onPostExecute(allBusinesses);
 
                 Long bId = FindBIdByName(bName, allBusinesses);
@@ -154,16 +157,8 @@ public class UpdateRemoveActivityActivity extends AppCompatActivity {
                 updatedActivity.setId(aId);
                 updatedActivity.setDescription(description);
                 updatedActivity.setCountry(countryText.getText().toString());
-                try {
-                    updatedActivity.setStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(startDate));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    updatedActivity.setEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(endDate));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                updatedActivity.setStartDate(startDate);
+                updatedActivity.setEndDate(endDate);
                 updatedActivity.setCost(Integer.parseInt(costText.getText().toString()));
                 updatedActivity.setShortDescription(shortDescText.getText().toString());
                 updatedActivity.setBusinessId(bId);
@@ -172,8 +167,8 @@ public class UpdateRemoveActivityActivity extends AppCompatActivity {
                 cv.put(MyContract.Activity.ACTIVITY_ID, updatedActivity.getId());
                 cv.put(MyContract.Activity.ACTIVITY_DESCRIPTION, updatedActivity.getDescription().toString());
                 cv.put(MyContract.Activity.ACTIVITY_COUNTRY, updatedActivity.getCountry());
-                cv.put(MyContract.Activity.ACTIVITY_START_DATE, new SimpleDateFormat("dd/MM/yyyy").format(updatedActivity.getStartDate()));
-                cv.put(MyContract.Activity.ACTIVITY_END_DATE, new SimpleDateFormat("dd/MM/yyyy").format(updatedActivity.getEndDate()));
+                cv.put(MyContract.Activity.ACTIVITY_START_DATE, updatedActivity.getStartDate());
+                cv.put(MyContract.Activity.ACTIVITY_END_DATE, updatedActivity.getEndDate());
                 cv.put(MyContract.Activity.ACTIVITY_COST, updatedActivity.getCost());
                 cv.put(MyContract.Activity.ACTIVITY_SHORT_DESCRIPTION, updatedActivity.getShortDescription());
                 cv.put(MyContract.Activity.ACTIVITY_BUSINESS_ID, updatedActivity.getBusinessId());
@@ -185,13 +180,13 @@ public class UpdateRemoveActivityActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    protected void onPostExecute(Integer result) {
+                    protected void onPostExecute(Integer result)
+                    {
                         super.onPostExecute(result);
 
-                        if (result > 0){
-                            Toast.makeText(getApplicationContext(), "activity updated", Toast.LENGTH_SHORT).show();
-                            UpdateRemoveActivityActivity.this.finish();
-                        }
+                        Toast.makeText(getApplicationContext(), "activity updated", Toast.LENGTH_SHORT).show();
+                        UpdateRemoveActivityActivity.this.finish();
+
                     }
                 }.execute();
             }
@@ -199,20 +194,21 @@ public class UpdateRemoveActivityActivity extends AppCompatActivity {
     }
     public void DeleteActivity(View view)
     {
-        new AsyncTask<Void, Void, Integer>() {
+        new AsyncTask<Void, Void, Integer>()
+        {
             @Override
-            protected Integer doInBackground(Void... params) {
+            protected Integer doInBackground(Void... params)
+            {
                 return getContentResolver().delete(MyContract.Activity.ACTIVITY_URI,"_id = ?", new String[]{String.valueOf(aId)});
             }
 
             @Override
-            protected void onPostExecute(Integer result) {
+            protected void onPostExecute(Integer result)
+            {
                 super.onPostExecute(result);
 
-                if (result > 0){
-                    Toast.makeText(getApplicationContext(), "activity deleted", Toast.LENGTH_SHORT).show();
-                    UpdateRemoveActivityActivity.this.finish();
-                }
+                Toast.makeText(getApplicationContext(), "activity deleted", Toast.LENGTH_SHORT).show();
+                UpdateRemoveActivityActivity.this.finish();
             }
         }.execute();
     }
@@ -236,7 +232,7 @@ public class UpdateRemoveActivityActivity extends AppCompatActivity {
         int bNameColumnIndex = businesses.getColumnIndex(MyContract.Business.BUSINESS_NAME);
         int bIdColumnIndex = businesses.getColumnIndex(MyContract.Business.BUSINESS_ID);
         while (businesses.moveToNext())
-            if (businesses.getString(bNameColumnIndex) == bName)
+            if (businesses.getString(bNameColumnIndex).equals(bName))
                 return businesses.getLong(bIdColumnIndex);
         return (long)-1;
     }

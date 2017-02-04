@@ -7,8 +7,8 @@ public class Activity
     private long id;
     private Description description;
     private String country;
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
     private int cost;
     private String shortDescription;
     private long BusinessId;
@@ -32,16 +32,16 @@ public class Activity
     public void setCountry(String country) {
         this.country = country;
     }
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
     public int getCost() {
@@ -63,7 +63,7 @@ public class Activity
         BusinessId = businessId;
     }
 
-    public Activity(long id, Description description, String country, Date startDate, Date endDate, int cost, String shortDescription, long businessId) {
+    public Activity(long id, Description description, String country, String startDate, String endDate, int cost, String shortDescription, long businessId) {
         this.id = id;
         this.description = description;
         this.country = country;

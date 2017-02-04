@@ -6,13 +6,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +41,7 @@ public class AddActivityActivity extends AppCompatActivity
         ActivitySpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Desc));
         TextView startDateText = (TextView) findViewById(R.id.startDateText);
         TextView endDateText = (TextView) findViewById(R.id.endDateText);
-        String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        String today = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
         startDateText.setText(today);
         endDateText.setText(today);
 
@@ -119,16 +118,8 @@ public class AddActivityActivity extends AppCompatActivity
                         newActivity.setId(aId);
                         newActivity.setDescription(description);
                         newActivity.setCountry(countryText.getText().toString());
-                        try {
-                            newActivity.setStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(startDate));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            newActivity.setEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(endDate));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
+                        newActivity.setStartDate(startDate);
+                        newActivity.setEndDate(endDate);
                         newActivity.setCost(Integer.parseInt(costText.getText().toString()));
                         newActivity.setShortDescription(shortDescText.getText().toString());
                         newActivity.setBusinessId(bId);
@@ -137,8 +128,8 @@ public class AddActivityActivity extends AppCompatActivity
                         cv.put(MyContract.Activity.ACTIVITY_ID, newActivity.getId());
                         cv.put(MyContract.Activity.ACTIVITY_DESCRIPTION, newActivity.getDescription().toString());
                         cv.put(MyContract.Activity.ACTIVITY_COUNTRY, newActivity.getCountry());
-                        cv.put(MyContract.Activity.ACTIVITY_START_DATE, new SimpleDateFormat("dd/MM/yyyy").format(newActivity.getStartDate()));
-                        cv.put(MyContract.Activity.ACTIVITY_END_DATE, new SimpleDateFormat("dd/MM/yyyy").format(newActivity.getEndDate()));
+                        cv.put(MyContract.Activity.ACTIVITY_START_DATE, (newActivity.getStartDate()));
+                        cv.put(MyContract.Activity.ACTIVITY_END_DATE, (newActivity.getEndDate()));
                         cv.put(MyContract.Activity.ACTIVITY_COST, newActivity.getCost());
                         cv.put(MyContract.Activity.ACTIVITY_SHORT_DESCRIPTION, newActivity.getShortDescription());
                         cv.put(MyContract.Activity.ACTIVITY_BUSINESS_ID, newActivity.getBusinessId());
@@ -212,7 +203,7 @@ public class AddActivityActivity extends AppCompatActivity
         int bNameColumnIndex = businesses.getColumnIndex(MyContract.Business.BUSINESS_NAME);
         int bIdColumnIndex = businesses.getColumnIndex(MyContract.Business.BUSINESS_ID);
         while (businesses.moveToNext())
-            if (businesses.getString(bNameColumnIndex) == bName)
+            if (businesses.getString(bNameColumnIndex).equals(bName))
                 return businesses.getLong(bIdColumnIndex);
         return (long)-1;
     }

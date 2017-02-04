@@ -285,13 +285,13 @@ public class SQL_DBManager implements IDB_manager
                 JSONObject jsonObject = null;
 
                 jsonObject = array.getJSONObject(i);
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+//                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 matrixCursor.addRow(new Object[]{
                         jsonObject.getLong(MyContract.Activity.ACTIVITY_ID),
                         jsonObject.get(MyContract.Activity.ACTIVITY_DESCRIPTION).toString().replaceAll("_"," "),
                         jsonObject.getString(MyContract.Activity.ACTIVITY_COUNTRY),
-                        jsonObject.getString(sdf.format(MyContract.Activity.ACTIVITY_START_DATE)),
-                        jsonObject.getString(sdf.format(MyContract.Activity.ACTIVITY_END_DATE)),
+                        jsonObject.getString(MyContract.Activity.ACTIVITY_START_DATE),
+                        jsonObject.getString(MyContract.Activity.ACTIVITY_END_DATE),
                         jsonObject.getInt(MyContract.Activity.ACTIVITY_COST),
                         jsonObject.getString(MyContract.Activity.ACTIVITY_SHORT_DESCRIPTION),
                         jsonObject.getLong(MyContract.Activity.ACTIVITY_BUSINESS_ID)

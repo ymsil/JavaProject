@@ -47,23 +47,14 @@ public class Tools
     public static trabelstesh.javaproject.model.entities.Activity ContentValuesToActivity(ContentValues contentValues)
     {
         Activity activity = new Activity();
-
-        try {
-            DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-            activity.setId(contentValues.getAsInteger(MyContract.Activity.ACTIVITY_ID));
-            activity.setDescription(contentValues.getAsString(MyContract.Activity.ACTIVITY_DESCRIPTION));
-            activity.setCountry(contentValues.getAsString(MyContract.Activity.ACTIVITY_COUNTRY));
-            activity.setStartDate(format.parse(contentValues.getAsString(MyContract.Activity.ACTIVITY_START_DATE)));
-            activity.setEndDate(format.parse(contentValues.getAsString(MyContract.Activity.ACTIVITY_END_DATE)));
-            activity.setCost(contentValues.getAsInteger(MyContract.Activity.ACTIVITY_COST));
-            activity.setShortDescription(contentValues.getAsString(MyContract.Activity.ACTIVITY_SHORT_DESCRIPTION));
-            activity.setBusinessId(contentValues.getAsLong(MyContract.Activity.ACTIVITY_BUSINESS_ID));
-
-        }
-        catch (ParseException e)
-        {
-            e.toString();
-        }
+        activity.setId(contentValues.getAsInteger(MyContract.Activity.ACTIVITY_ID));
+        activity.setDescription(contentValues.getAsString(MyContract.Activity.ACTIVITY_DESCRIPTION));
+        activity.setCountry(contentValues.getAsString(MyContract.Activity.ACTIVITY_COUNTRY));
+        activity.setStartDate(contentValues.getAsString(MyContract.Activity.ACTIVITY_START_DATE));
+        activity.setEndDate(contentValues.getAsString(MyContract.Activity.ACTIVITY_END_DATE));
+        activity.setCost(contentValues.getAsInteger(MyContract.Activity.ACTIVITY_COST));
+        activity.setShortDescription(contentValues.getAsString(MyContract.Activity.ACTIVITY_SHORT_DESCRIPTION));
+        activity.setBusinessId(contentValues.getAsLong(MyContract.Activity.ACTIVITY_BUSINESS_ID));
 
         return activity;
     }

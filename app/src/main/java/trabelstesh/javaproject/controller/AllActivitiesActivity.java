@@ -18,7 +18,6 @@ public class AllActivitiesActivity extends AppCompatActivity
 {
     Intent addActivityIntent;
     Intent updateDeleteActivityIntent;
-    Cursor allActivities;
 
     @Override
     protected void onResume()
@@ -31,39 +30,37 @@ public class AllActivitiesActivity extends AppCompatActivity
             protected Cursor doInBackground(Void... params)
             {
                 return getContentResolver().query(MyContract.Activity.ACTIVITY_URI, null, null, null, null, null);
-//                return allActivities;
-//                return null;
             }
 
             @Override
             protected void onPostExecute(Cursor activities)
             {
                 super.onPostExecute(activities);
-                allActivities = activities;
+//                allActivities = activities;
+                // Find ListView to populate
+                ListView lvItems = (ListView) findViewById(R.id.activitiesLV);
+                // Setup cursor adapter using cursor from last step
+                ActivityCursorAdapter activityCursorAdapter = new ActivityCursorAdapter(AllActivitiesActivity.this, activities);
+                // Attach cursor adapter to the ListView
+                lvItems.setAdapter(activityCursorAdapter);
+
+                updateDeleteActivityIntent = new Intent(AllActivitiesActivity.this, UpdateRemoveActivityActivity.class);
+
+                lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                        final Cursor listViewRow = (Cursor) parent.getItemAtPosition(position);
+                        long aId = listViewRow.getLong(listViewRow.getColumnIndex(MyContract.Activity.ACTIVITY_ID));
+                        Bundle sendRowToActivity = new Bundle();
+
+                        sendRowToActivity.putLong(MyContract.Activity.ACTIVITY_ID, aId);
+                        updateDeleteActivityIntent.putExtras(sendRowToActivity);
+                        startActivity(updateDeleteActivityIntent);
+                        return false;
+                    }
+                });
             }
         }.execute();
-        // Find ListView to populate
-        ListView lvItems = (ListView) findViewById(R.id.activitiesLV);
-        // Setup cursor adapter using cursor from last step
-        ActivityCursorAdapter activityCursorAdapter = new ActivityCursorAdapter(AllActivitiesActivity.this, allActivities);
-        // Attach cursor adapter to the ListView
-        lvItems.setAdapter(activityCursorAdapter);
-
-        updateDeleteActivityIntent = new Intent(this, UpdateRemoveActivityActivity.class);
-
-        lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                final Cursor listViewRow = (Cursor) parent.getItemAtPosition(position);
-                long aId = listViewRow.getLong(listViewRow.getColumnIndex(MyContract.Activity.ACTIVITY_ID));
-                Bundle sendRowToActivity = new Bundle();
-
-                sendRowToActivity.putLong(MyContract.Activity.ACTIVITY_ID, aId);
-                updateDeleteActivityIntent.putExtras(sendRowToActivity);
-                startActivity(updateDeleteActivityIntent);
-                return false;
-            }
-        });
     }
 
     @Override
@@ -72,7 +69,8 @@ public class AllActivitiesActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_activities);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.activitiesToolbar);
+        toolbar.setTitle("Activities list:");
         setSupportActionBar(toolbar);
 
         addActivityIntent = new Intent(this, AddActivityActivity.class);
