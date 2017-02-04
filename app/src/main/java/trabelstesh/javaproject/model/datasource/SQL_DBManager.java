@@ -21,7 +21,7 @@ import trabelstesh.javaproject.model.backend.MyContract;
 public class SQL_DBManager implements IDB_manager
 {
     private final String WEB_URL = "http://staszews.vlab.jct.ac.il/php";
-    /* TODo: continue implementing updates & deletes */
+
     public static boolean changed = false;
 
     @Override

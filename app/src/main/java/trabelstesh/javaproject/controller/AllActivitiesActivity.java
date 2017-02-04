@@ -14,70 +14,76 @@ import android.widget.ListView;
 import trabelstesh.javaproject.R;
 import trabelstesh.javaproject.model.backend.MyContract;
 
-public class AllActivitiesActivity extends AppCompatActivity {
+public class AllActivitiesActivity extends AppCompatActivity
+{
+    Intent addActivityIntent;
+    Intent updateDeleteActivityIntent;
+    Cursor allActivities;
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
 
-        UpdateListView();
-    }
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_all_activities);
-
-        UpdateListView();
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        final Intent regintent = new Intent(this, AddActivityActivity.class);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addActivityActionButton);
-        fab.setOnClickListener(new View.OnClickListener() {
+        new AsyncTask<Void, Void, Cursor>()
+        {
             @Override
-            public void onClick(View view) {
-                startActivity((regintent));
+            protected Cursor doInBackground(Void... params)
+            {
+                return getContentResolver().query(MyContract.Activity.ACTIVITY_URI, null, null, null, null, null);
+//                return allActivities;
+//                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Cursor activities)
+            {
+                super.onPostExecute(activities);
+                allActivities = activities;
+            }
+        }.execute();
+        // Find ListView to populate
+        ListView lvItems = (ListView) findViewById(R.id.activitiesLV);
+        // Setup cursor adapter using cursor from last step
+        ActivityCursorAdapter activityCursorAdapter = new ActivityCursorAdapter(AllActivitiesActivity.this, allActivities);
+        // Attach cursor adapter to the ListView
+        lvItems.setAdapter(activityCursorAdapter);
+
+        updateDeleteActivityIntent = new Intent(this, UpdateRemoveActivityActivity.class);
+
+        lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final Cursor listViewRow = (Cursor) parent.getItemAtPosition(position);
+                long aId = listViewRow.getLong(listViewRow.getColumnIndex(MyContract.Activity.ACTIVITY_ID));
+                Bundle sendRowToActivity = new Bundle();
+
+                sendRowToActivity.putLong(MyContract.Activity.ACTIVITY_ID, aId);
+                updateDeleteActivityIntent.putExtras(sendRowToActivity);
+                startActivity(updateDeleteActivityIntent);
+                return false;
             }
         });
     }
 
-    private void UpdateListView()
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
     {
-        new AsyncTask<Void, Void, Cursor>() {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_all_activities);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        addActivityIntent = new Intent(this, AddActivityActivity.class);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addActivityActionButton);
+        fab.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            protected Cursor doInBackground(Void... params) {
-                return getContentResolver().query(MyContract.Activity.ACTIVITY_URI, null, null, null, null, null);
+            public void onClick(View view) {
+                startActivity((addActivityIntent));
             }
-
-            @Override
-            protected void onPostExecute(Cursor cursor) {
-                super.onPostExecute(cursor);
-
-                // Find ListView to populate
-                ListView lvItems = (ListView) findViewById(R.id.activitiesLV);
-                // Setup cursor adapter using cursor from last step
-                ActivityCursorAdapter activityCursorAdapter = new ActivityCursorAdapter(AllActivitiesActivity.this, cursor);
-                // Attach cursor adapter to the ListView
-                lvItems.setAdapter(activityCursorAdapter);
-
-                final Intent regintent = new Intent(AllActivitiesActivity.this, UpdateRemoveActivityActivity.class);
-                lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                    @Override
-                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                        final Cursor listViewRow = (Cursor) parent.getItemAtPosition(position);
-                        long aId = listViewRow.getLong(listViewRow.getColumnIndex(MyContract.Activity.ACTIVITY_ID));
-                        Bundle sendRowToActivity = new Bundle();
-                        sendRowToActivity.putLong(MyContract.Activity.ACTIVITY_ID, aId);
-                        regintent.putExtras(sendRowToActivity);
-                        startActivity(regintent);
-                        return false;
-                    }
-                });
-            }
-        }.execute();
+        });
     }
 }
 

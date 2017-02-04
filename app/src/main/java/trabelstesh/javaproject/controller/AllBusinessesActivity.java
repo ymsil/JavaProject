@@ -1,8 +1,11 @@
 package trabelstesh.javaproject.controller;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -25,6 +28,9 @@ import trabelstesh.javaproject.model.entities.Business;
 
 public class AllBusinessesActivity extends AppCompatActivity
 {
+    Dialog updateDeleteDialog;
+    Business updatedBusiness;
+    boolean deleteFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -137,49 +143,60 @@ public class AllBusinessesActivity extends AppCompatActivity
 
     private void UpdateListView()
     {
-        new AsyncTask<Void, Void, Cursor>() {
+        new AsyncTask<Void, Void, Cursor>()
+        {
 
             @Override
-            protected Cursor doInBackground(Void... params) {
+            protected Cursor doInBackground(Void... params)
+            {
                 return getContentResolver().query(MyContract.Business.BUSINESS_URI, null, null, null, null, null);
             }
 
             @Override
-            protected void onPostExecute(Cursor cursor) {
+            protected void onPostExecute(Cursor cursor)
+            {
                 super.onPostExecute(cursor);
 
                 // Find ListView to populate
                 ListView lvItems = (ListView) findViewById(R.id.businessesLV);
                 // Setup cursor adapter using cursor from last step
-                final BusinessCursorAdapter businessCursorAdapter = new BusinessCursorAdapter(AllBusinessesActivity.this, cursor);
+                BusinessCursorAdapter businessCursorAdapter = new BusinessCursorAdapter(AllBusinessesActivity.this, cursor);
+                // clean List View
+                lvItems.setAdapter(null);
                 // Attach cursor adapter to the ListView
                 lvItems.setAdapter(businessCursorAdapter);
 
-                final Dialog dialog = new Dialog(AllBusinessesActivity.this);
+                updateDeleteDialog = new Dialog(AllBusinessesActivity.this);
                 lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
                 {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
                     {
-                        final Cursor listViewRow = (Cursor) parent.getItemAtPosition(position);
-                        dialog.setContentView(R.layout.addbusiness_dialog);
-                        dialog.show();
-                        //long bId = listViewRow.getLong(listViewRow.getColumnIndex(MyContract.Business.BUSINESS_ID));
-                        EditText nameText = (EditText)dialog.findViewById(R.id.businessNameText);
+
+                        Toast.makeText(getApplicationContext(), "notice! deleting a business will delete all connected activities", Toast.LENGTH_SHORT).show();
+
+
+                        Cursor listViewRow = (Cursor) parent.getItemAtPosition(position);
+                        final long bId = listViewRow.getLong(listViewRow.getColumnIndex(MyContract.Business.BUSINESS_ID));
+
+                        updateDeleteDialog.setContentView(R.layout.addbusiness_dialog);
+                        EditText nameText = (EditText)updateDeleteDialog.findViewById(R.id.businessNameText);
                         nameText.setText(listViewRow.getString(listViewRow.getColumnIndex(MyContract.Business.BUSINESS_NAME)));
-                        EditText addressText = (EditText)dialog.findViewById(R.id.addressText);
+                        EditText addressText = (EditText)updateDeleteDialog.findViewById(R.id.addressText);
                         addressText.setText(listViewRow.getString(listViewRow.getColumnIndex(MyContract.Business.BUSINESS_ADDRESS)));
-                        EditText phoneText = (EditText)dialog.findViewById(R.id.PhoneText);
+                        EditText phoneText = (EditText)updateDeleteDialog.findViewById(R.id.PhoneText);
                         phoneText.setText(listViewRow.getString(listViewRow.getColumnIndex(MyContract.Business.BUSINESS_PHONE)));
-                        EditText emailText = (EditText)dialog.findViewById(R.id.emailText);
+                        EditText emailText = (EditText)updateDeleteDialog.findViewById(R.id.emailText);
                         emailText.setText(listViewRow.getString(listViewRow.getColumnIndex(MyContract.Business.BUSINESS_EMAIL)));
-                        EditText websiteText = (EditText)dialog.findViewById(R.id.webText);
+                        EditText websiteText = (EditText)updateDeleteDialog.findViewById(R.id.webText);
                         websiteText.setText(listViewRow.getString(listViewRow.getColumnIndex(MyContract.Business.BUSINESS_WEBSITE)));
 
-                        Button updateBusinessButton = (Button)dialog.findViewById(R.id.AddNewBusinessButton);
+                        Button updateBusinessButton = (Button)updateDeleteDialog.findViewById(R.id.AddNewBusinessButton);
                         updateBusinessButton.setText("Update");
-                        Button deleteBusinessButton = (Button)dialog.findViewById(R.id.noNewBusinessButton);
+                        Button deleteBusinessButton = (Button)updateDeleteDialog.findViewById(R.id.noNewBusinessButton);
                         deleteBusinessButton.setText("Delete");
+
+                        updateDeleteDialog.show();
 
                         updateBusinessButton.setOnClickListener(new View.OnClickListener()
                         {
@@ -187,14 +204,13 @@ public class AllBusinessesActivity extends AppCompatActivity
                             public void onClick(View v)
                             {
 
-                                EditText nameText = (EditText)dialog.findViewById(R.id.businessNameText);
-                                EditText addressText = (EditText)dialog.findViewById(R.id.addressText);
-                                EditText phoneText = (EditText)dialog.findViewById(R.id.PhoneText);
-                                EditText emailText = (EditText)dialog.findViewById(R.id.emailText);
-                                EditText websiteText = (EditText)dialog.findViewById(R.id.webText);
+                                EditText nameText = (EditText)updateDeleteDialog.findViewById(R.id.businessNameText);
+                                EditText addressText = (EditText)updateDeleteDialog.findViewById(R.id.addressText);
+                                EditText phoneText = (EditText)updateDeleteDialog.findViewById(R.id.PhoneText);
+                                EditText emailText = (EditText)updateDeleteDialog.findViewById(R.id.emailText);
+                                EditText websiteText = (EditText)updateDeleteDialog.findViewById(R.id.webText);
 
-                                final Business updatedBusiness = new Business();
-                                final long bId = listViewRow.getLong(listViewRow.getColumnIndex(MyContract.Business.BUSINESS_ID));
+                                updatedBusiness = new Business();
                                 updatedBusiness.setId(bId);
                                 updatedBusiness.setName(nameText.getText().toString());
                                 updatedBusiness.setAddress(addressText.getText().toString());
@@ -225,24 +241,39 @@ public class AllBusinessesActivity extends AppCompatActivity
                                         if (result > 0)
                                         {
                                             Toast.makeText(getApplicationContext(), updatedBusiness.getName() + " Business updated", Toast.LENGTH_SHORT).show();
-                                            UpdateListView();
                                         }
                                     }
                                 }.execute();
-
-                                dialog.cancel();
-
+                                updateDeleteDialog.cancel();
+                                UpdateListView();
                             }
                         });
 
                         deleteBusinessButton.setOnClickListener(new View.OnClickListener()
                         {
+
                             @Override
                             public void onClick(View v)
                             {
-                                final long bId = listViewRow.getLong(listViewRow.getColumnIndex(MyContract.Business.BUSINESS_ID));
                                 final String id = String.valueOf(bId);
-
+//                                new AlertDialog.Builder(AllBusinessesActivity.this)
+//                                        .setTitle("Delete Business")
+//                                        .setMessage("Are you sure you want to delete this business?\n" +
+//                                                "notice! deleting a business will delete all connected activities.")
+//                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
+//                                        {
+//                                            public void onClick(DialogInterface dialog, int which)
+//                                            {
+//
+//                                            }
+//                                        })
+//                                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+//                                            public void onClick(DialogInterface dialog, int which) {
+//
+//                                            }
+//                                        })
+//                                        .setIcon(android.R.drawable.ic_dialog_alert)
+//                                        .show();
                                 new AsyncTask<Void, Void, Integer>() {
                                     @Override
                                     protected Integer doInBackground(Void... params) {
@@ -251,17 +282,9 @@ public class AllBusinessesActivity extends AppCompatActivity
                                                 "_id = ?",
                                                 new String[]{id});
                                     }
-
-                                    @Override
-                                    protected void onPostExecute(Integer result) {
-                                        super.onPostExecute(result);
-                                        if (result > 0) {
-                                            Toast.makeText(getApplicationContext(), bId + " Business deleted", Toast.LENGTH_SHORT).show();
-                                            UpdateListView();
-                                        }
-                                    }
                                 }.execute();
-                                dialog.cancel();
+                                updateDeleteDialog.cancel();
+                                UpdateListView();
                             }
                         });
                         return false;
@@ -272,6 +295,7 @@ public class AllBusinessesActivity extends AppCompatActivity
         }.execute();
 
     }
+
 
     private long GenerateNewID(Cursor cursor)
     {

@@ -28,7 +28,8 @@ import trabelstesh.javaproject.model.backend.MyContract;
 import trabelstesh.javaproject.model.entities.Activity;
 import trabelstesh.javaproject.model.entities.Description;
 
-public class AddActivityActivity extends AppCompatActivity {
+public class AddActivityActivity extends AppCompatActivity
+{
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -41,18 +42,20 @@ public class AddActivityActivity extends AppCompatActivity {
         ActivitySpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Desc));
         TextView startDateText = (TextView) findViewById(R.id.startDateText);
         TextView endDateText = (TextView) findViewById(R.id.endDateText);
-        String today = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+        String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         startDateText.setText(today);
         endDateText.setText(today);
 
         new AsyncTask<Void, Void, Cursor>() {
             @Override
-            protected Cursor doInBackground(Void... params) {
+            protected Cursor doInBackground(Void... params)
+            {
                 return getContentResolver().query(MyContract.Business.BUSINESS_URI,null, null, null, null, null);
             }
 
             @Override
-            protected void onPostExecute(Cursor allBusinesses) {
+            protected void onPostExecute(Cursor allBusinesses)
+            {
                 super.onPostExecute(allBusinesses);
 
                 int businessNameColumnIndex = allBusinesses.getColumnIndex(MyContract.Business.BUSINESS_NAME);
@@ -89,7 +92,8 @@ public class AddActivityActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void onPostExecute(Cursor allBusinesses) {
+            protected void onPostExecute(Cursor allBusinesses)
+            {
                 super.onPostExecute(allBusinesses);
 
                 final Long bId = FindBIdByName(bName, allBusinesses);
@@ -99,7 +103,8 @@ public class AddActivityActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                new AsyncTask<Void, Void, Cursor>() {
+                new AsyncTask<Void, Void, Cursor>()
+                {
                     @Override
                     protected Cursor doInBackground(Void... params) {
                         return getContentResolver().query(MyContract.Activity.ACTIVITY_URI, null, null, null, null, null);
