@@ -30,7 +30,6 @@ public class AllBusinessesActivity extends AppCompatActivity
 {
     Dialog updateDeleteDialog;
     Business updatedBusiness;
-    boolean deleteFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
